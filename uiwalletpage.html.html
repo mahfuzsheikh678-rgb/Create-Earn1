@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Wallet · Create&Earn V5</title>
+    <!-- Fonts & Icons (optimized) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Hind Siliguri',sans-serif;}
+        body{
+            background:#0D1B2A; color:#fff; line-height:1.5; max-width:450px; margin:0 auto;
+            min-height:100vh; box-shadow:0 0 30px #0000004d; overflow-x:hidden; transition:0.2s;
+        }
+        body.light-mode{background:#f0f2f5; color:#1e293b;}
+        /* modern flex & cleanup */
+        .container{padding:16px 16px 90px;} /* space for floating nav */
+        /* top navbar */
+        .top-navbar{
+            background:linear-gradient(145deg,#0f172a,#1a2a3a); padding:14px 20px;
+            display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e3a5f;
+        }
+        .light-mode .top-navbar{background:linear-gradient(145deg,#e2e8f0,#cbd5e1); border-bottom:1px solid #b0c4de;}
+        .nav-left, .nav-right{display:flex; gap:18px; align-items:center;}
+        .nav-icon-btn{
+            background:transparent; border:none; color:#4cc9f0; font-size:1.4rem; 
+            width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+            transition:0.2s; cursor:pointer;
+        }
+        .light-mode .nav-icon-btn{color:#0f2b4b;}
+        .nav-icon-btn:hover{background:#1e3a5f66; transform:scale(1.05);}
+        .app-title{font-size:1.5rem; font-weight:700; background:linear-gradient(130deg,#4cc9f0,#4361ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+        .light-mode .app-title{background:linear-gradient(130deg,#0b2b4a,#1f4b8a); -webkit-background-clip:text;}
+        /* page title */
+        .page-title{font-size:1.8rem; font-weight:600; margin:20px 0 12px; text-align:center; border-bottom:2px solid #1e3a5f; padding-bottom:8px;}
+        .light-mode .page-title{border-bottom-color:#94a3b8;}
+        /* balance card */
+        .balance-card{
+            background:linear-gradient(145deg,#16213e,#1e3a5f); border-radius:28px; padding:26px 20px;
+            text-align:center; margin-bottom:24px; border:2px solid #4361ee; transition:0.2s;
+        }
+        .light-mode .balance-card{background:#fff; border-color:#4361ee; box-shadow:0 8px 20px #0000001a;}
+        .balance-label{color:#aaa; font-size:1.1rem;}
+        .balance-amount{font-size:3rem; font-weight:700; color:#4cc9f0; text-shadow:0 0 8px #4cc9f080;}
+        .meta-row{display:flex; justify-content:center; gap:15px; font-size:0.9rem; color:#8a8a8a; margin-top:12px; flex-wrap:wrap;}
+        .meta-row button{background:none; border:none; color:#4cc9f0; cursor:pointer;}
+        /* quick action row */
+        .action-row{display:flex; gap:12px; margin-bottom:24px;}
+        .btn{
+            flex:1; padding:12px 0; border:none; border-radius:40px; font-weight:600; display:flex;
+            align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:0.2s;
+            background:#1e3a5f; color:#4cc9f0; border:1px solid #4361ee;
+        }
+        .light-mode .btn{background:#e9f0ff; color:#1e3a5f; border-color:#a0b9e6;}
+        .btn-success{background:#10b981; color:white; border:none;}
+        .btn-primary{background:#4361ee; color:white; border:none;}
+        .btn-small{padding:8px 12px; font-size:0.9rem;}
+        /* cards general */
+        .card, .deposit-card{
+            background:#16213e; border-radius:24px; padding:20px; margin-bottom:24px; border:1px solid #1e3a5f;
+            transition:0.2s; box-shadow:0 6px 12px #00000033;
+        }
+        .light-mode .card, .light-mode .deposit-card{background:#ffffff; border-color:#cbd5e1;}
+        h3{color:#4cc9f0; margin-bottom:18px; font-size:1.5rem;}
+        /* form */
+        .form-group{margin-bottom:18px;}
+        .form-label{display:block; margin-bottom:6px; font-weight:500; color:#b0c4de;}
+        .light-mode .form-label{color:#2c3e50;}
+        .required-star{color:#ef4444;}
+        .form-control, .search-input{
+            width:100%; padding:14px 18px; background:#1e3a5f; border:1px solid #2a4a7a;
+            border-radius:30px; color:#fff; font-size:1rem; outline:none; transition:0.2s;
+        }
+        .light-mode .form-control, .light-mode .search-input{background:#f1f5f9; border-color:#94a3b8; color:#0f172a;}
+        .form-control:focus{border-color:#4361ee; box-shadow:0 0 0 3px #4361ee40;}
+        /* payment ranking */
+        .payment-ranking{
+            display:flex; align-items:center; justify-content:space-between; background:#1e3a5f80;
+            padding:12px 18px; border-radius:30px; margin-bottom:10px; cursor:pointer; transition:0.2s;
+            border:1px solid transparent;
+        }
+        .payment-ranking.selected{background:#2a4a7a; border-color:#4cc9f0;}
+        .payment-popular{color:#fbbf24; font-size:0.8rem; margin-left:8px;}
+        .payment-percentage{background:#4361ee; color:#fff; border-radius:40px; padding:4px 14px; font-size:0.8rem;}
+        /* withdraw fee row */
+        .fee-row{
+            display:flex; justify-content:space-between; background:#1e3a5f80; padding:12px 16px;
+            border-radius:30px; margin:15px 0; font-size:1rem;
+        }
+        /* export options */
+        .export-options{display:none; background:#1e3a5f; border-radius:24px; padding:18px; margin-bottom:24px;}
+        .export-options.show{display:block;}
+        .export-flex{display:flex; gap:10px; margin-top:12px;}
+        /* transaction table */
+        .table-responsive{overflow-x:auto;}
+        .transaction-table{width:100%; border-collapse:collapse;}
+        .transaction-table th{background:#1e3a5f; color:#4cc9f0; padding:12px 6px; font-weight:600;}
+        .light-mode .transaction-table th{background:#dee8fa;}
+        .transaction-table td{padding:12px 6px; border-bottom:1px solid #1e3a5f;}
+        .status-badge{display:inline-block; padding:4px 12px; border-radius:40px; font-size:0.8rem; font-weight:600;}
+        .status-completed{background:#10b98120; color:#10b981;}
+        .status-pending{background:#f59e0b20; color:#f59e0b;}
+        /* filter row */
+        .filter-row{display:flex; gap:10px; margin-bottom:20px;}
+        .filter-btn{flex:1; background:#1e3a5f; border:1px solid #2a4a7a; color:#fff; padding:10px; border-radius:40px; cursor:pointer;}
+        .light-mode .filter-btn{background:#e2e8f0; color:#0f172a;}
+        .filter-btn.active{background:#4361ee; color:white; border-color:#4cc9f0;}
+        /* modal */
+        .modal-overlay{
+            display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#000000b3;
+            align-items:center; justify-content:center; z-index:2000; max-width:450px; margin:0 auto;
+        }
+        .modal{background:#16213e; border-radius:32px; padding:28px; width:90%; border:2px solid #4361ee;}
+        .light-mode .modal{background:#ffffff;}
+        .otp-row{display:flex; gap:8px; justify-content:center; margin:24px 0;}
+        .otp-input{width:50px; height:60px; text-align:center; font-size:2rem; background:#1e3a5f; border:2px solid #4361ee; border-radius:18px; color:#fff;}
+        .resend{color:#4cc9f0; text-align:center; cursor:pointer;}
+        /* floating bottom nav (6 items) */
+        .bottom-nav-floating{
+            position:fixed; bottom:16px; left:0; right:0; max-width:430px; margin:0 auto; background:#0f172ad9;
+            backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-radius:50px;
+            display:flex; justify-content:space-around; padding:10px 4px; border:1px solid #4361ee; box-shadow:0 8px 30px #0000004d; z-index:1000;
+        }
+        .light-mode .bottom-nav-floating{background:#e2e8f0e6; border-color:#94a3b8;}
+        .nav-item-floating{
+            display:flex; flex-direction:column; align-items:center; color:#94a3b8; font-size:0.75rem;
+            transition:0.2s; cursor:pointer; padding:4px 0; width:16%; border-radius:40px;
+        }
+        .nav-item-floating i{font-size:1.3rem; margin-bottom:2px;}
+        .nav-item-floating.active{background:#4361ee30; color:#4cc9f0;}
+        .nav-item-floating.active i{color:#4cc9f0;}
+        .light-mode .nav-item-floating.active{background:#b3c9ff;}
+        /* loader */
+        .loader{display:none; width:24px; height:24px; border:3px solid #fff; border-top:3px solid #4361ee; border-radius:50%; animation:spin 1s infinite; margin:0 auto;}
+        @keyframes spin{to{transform:rotate(360deg);}}
+        .notification-toast{
+            position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#4361ee; color:#fff;
+            padding:12px 24px; border-radius:60px; z-index:3000; box-shadow:0 10px 30px black; font-weight:500;
+        }
+        /* remove unused */
+        .no-wrap{white-space:nowrap;}
+    </style>
+</head>
+<body>
+    <!-- top navbar with wallet & notification on right -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <button class="nav-icon-btn" id="back-btn"><i class="fas fa-arrow-left"></i></button>
+            <span class="app-title">ওয়ালেট</span>
+        </div>
+        <div class="nav-right">
+            <button class="nav-icon-btn" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            <button class="nav-icon-btn" id="notification-btn"><i class="fas fa-bell"></i></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 class="page-title">আমার ওয়ালেট</h2>
+        <!-- balance card -->
+        <div class="balance-card">
+            <div class="balance-label">বর্তমান ব্যালেন্স</div>
+            <div class="balance-amount" id="balance-amount">৳১,৫৫০.৫০</div>
+            <div class="meta-row">
+                <span id="last-update">আজ, ১০:৩০ AM</span>
+                <button id="refresh-balance"><i class="fas fa-sync-alt"></i> রিফ্রেশ</button>
+            </div>
+        </div>
+
+        <!-- quick actions -->
+        <div class="action-row">
+            <button class="btn btn-success btn-small" id="quick-deposit"><i class="fas fa-plus"></i> দ্রুত ডিপোজিট</button>
+            <button class="btn btn-primary btn-small" id="quick-withdraw"><i class="fas fa-paper-plane"></i> দ্রুত উইথড্র</button>
+            <button class="btn btn-small" id="export-transactions"><i class="fas fa-download"></i> রিপোর্ট</button>
+        </div>
+
+        <!-- export dropdown -->
+        <div class="export-options" id="export-options">
+            <h4 style="color:#4cc9f0;">রিপোর্ট ডাউনলোড</h4>
+            <div class="export-flex">
+                <button class="btn btn-small" onclick="exportTransactions('csv')">CSV</button>
+                <button class="btn btn-small" onclick="exportTransactions('pdf')">PDF</button>
+                <button class="btn btn-small" onclick="exportTransactions('excel')">Excel</button>
+            </div>
+        </div>
+
+        <!-- deposit card (simplified) -->
+        <div class="deposit-card" id="deposit-card">
+            <h3>ডিপোজিট করুন</h3>
+            <div class="form-group">
+                <label class="form-label">পেমেন্ট মাধ্যম <span class="required-star">*</span></label>
+                <div id="payment-ranking-container">
+                    <div class="payment-ranking" data-method="bkash">
+                        <span><i class="fas fa-mobile-alt"></i> <strong>bKash</strong> <span class="payment-popular">⭐ জনপ্রিয়</span></span>
+                        <span class="payment-percentage">85%</span>
+                    </div>
+                    <div class="payment-ranking" data-method="nagad">
+                        <span><i class="fas fa-wallet"></i> <strong>Nagad</strong></span>
+                        <span class="payment-percentage">10%</span>
+                    </div>
+                    <div class="payment-ranking" data-method="rocket">
+                        <span><i class="fas fa-credit-card"></i> <strong>Rocket</strong></span>
+                        <span class="payment-percentage">5%</span>
+                    </div>
+                </div>
+                <select class="form-control" id="deposit-method" style="display:none;"><option>bkash</option></select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">পরিমাণ</label>
+                <input type="number" class="form-control" id="deposit-amount" min="100" value="500" placeholder="ন্যূনতম ১০০">
+            </div>
+            <div class="form-group">
+                <label class="form-label">মোবাইল নম্বর</label>
+                <input type="text" class="form-control" id="deposit-phone" value="01311194506">
+            </div>
+            <button class="btn btn-success" id="deposit-btn"><i class="fas fa-money-bill"></i> ডিপোজিট করুন <span class="loader" id="deposit-loader"></span></button>
+            <div class="alert" style="background:#1e3a5f; border-radius:40px; padding:12px; margin-top:16px;"><i class="fas fa-bolt"></i> অটো ডিপোজিট চালু</div>
+        </div>
+
+        <!-- withdraw card -->
+        <div class="card">
+            <h3>উইথড্র</h3>
+            <div class="fee-row"><span>ডেইলি লিমিট</span> <span>৳৫,০০০ / ৳১০,০০০</span> <button class="btn-small" onclick="showLimitSettings()"><i class="fas fa-cog"></i></button></div>
+            <div class="form-group">
+                <label class="form-label">উইথড্র পরিমাণ</label>
+                <input type="number" class="form-control" id="withdraw-amount" min="100" value="500" step="any">
+            </div>
+            <div class="form-group">
+                <label class="form-label">পদ্ধতি</label>
+                <select class="form-control" id="withdraw-method">
+                    <option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="rocket">Rocket</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">মোবাইল নম্বর</label>
+                <input type="text" class="form-control" id="withdraw-phone" value="01311194506">
+            </div>
+            <div class="fee-row"><span>উইথড্র ফি</span> <span>৳৫.০০</span></div>
+            <div class="fee-row" style="color:#10b981;"><span>প্রাপ্তব্য</span> <span id="receivable-amount">৳৪৯৫.০০</span></div>
+            <button class="btn btn-primary" id="withdraw-btn"><i class="fas fa-paper-plane"></i> উইথড্র <span class="loader" id="withdraw-loader"></span></button>
+        </div>
+
+        <!-- search & transaction -->
+        <div class="card">
+            <h3>ট্রানজেকশন খুঁজুন</h3>
+            <div style="display:flex; gap:8px;">
+                <input type="text" class="search-input" id="search-transaction" placeholder="তারিখ/পরিমাণ">
+                <button class="btn-small" onclick="searchTransactions()"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <!-- filter buttons -->
+        <div class="filter-row">
+            <button class="filter-btn active" id="filter-all" onclick="filterTransactions('all')">সকল</button>
+            <button class="filter-btn" id="filter-deposit" onclick="filterTransactions('deposit')">ডিপোজিট</button>
+            <button class="filter-btn" id="filter-withdraw" onclick="filterTransactions('withdraw')">উইথড্র</button>
+        </div>
+
+        <!-- transaction table -->
+        <div class="card" style="padding:10px;">
+            <div class="table-responsive">
+                <table class="transaction-table">
+                    <thead><tr><th>তারিখ</th><th>বর্ণনা</th><th>পরিমাণ</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+                    <tbody id="transaction-body"></tbody>
+                </table>
+            </div>
+            <div style="text-align:center; margin:15px 0 5px;">
+                <button class="btn-small" id="load-more-btn" onclick="loadMoreTransactions()">আরো দেখুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP modal -->
+    <div class="modal-overlay" id="otp-modal">
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between;"><h3 class="modal-title">ওটিপি</h3><button class="close-modal" style="background:none; border:none; color:#aaa; font-size:2rem;" onclick="closeOTPModal()">&times;</button></div>
+            <p>মোবাইল <span id="otp-phone"></span> এ ওটিপি পাঠানো হয়েছে</p>
+            <div class="otp-row">
+                <input class="otp-input" maxlength="1" id="otp1"> <input class="otp-input" maxlength="1" id="otp2"> <input class="otp-input" maxlength="1" id="otp3">
+                <input class="otp-input" maxlength="1" id="otp4"> <input class="otp-input" maxlength="1" id="otp5"> <input class="otp-input" maxlength="1" id="otp6">
+            </div>
+            <div class="resend" onclick="resendOTP()">আবার পাঠান <span id="otp-timer"></span></div>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="verifyOTP()">ভেরিফাই</button>
+        </div>
+    </div>
+
+    <!-- floating bottom nav with 6 items -->
+    <div class="bottom-nav-floating">
+        <div class="nav-item-floating" onclick="goToPage('p2p')"><i class="fas fa-handshake"></i><span>P2P</span></div>
+        <div class="nav-item-floating" onclick="goToPage('order')"><i class="fas fa-clipboard-list"></i><span>অর্ডার</span></div>
+        <div class="nav-item-floating" onclick="goToPage('buy')"><i class="fas fa-cart-shopping"></i><span>ক্রয়</span></div>
+        <div class="nav-item-floating" onclick="goToPage('sell')"><i class="fas fa-tag"></i><span>বিক্রয়</span></div>
+        <div class="nav-item-floating" onclick="goToPage('generate')"><i class="fas fa-qrcode"></i><span>জেনারেট</span></div>
+        <div class="nav-item-floating active" onclick="goToPage('profile')"><i class="fas fa-user"></i><span>প্রোফাইল</span></div>
+    </div>
+
+    <script>
+        (function(){
+            // state
+            let walletState = {
+                balance: 1550.50,
+                transactions: [],
+                withdrawalFee: 5.00,
+                depositBonus: 0.05,
+                currentFilter: 'all',
+                transactionLimit: 5,
+                transactionOffset: 0,
+                dailyLimit: 10000,
+                usedDailyLimit: 0,
+                isDarkMode: true,
+                autoDepositEnabled: true,
+                notificationsEnabled: true,
+                currentOTP: '',
+                pendingWithdrawal: null,
+                searchQuery: ''
+            };
+
+            // sample transactions
+            const sampleTransactions = [
+                {id:1, date:"২৫ ডিসেম্বর", description:"P2P অর্ডার #ORD-005", amount:250, type:"income", status:"completed", method:"p2p", receipt:true},
+                {id:2, date:"২৪ ডিসেম্বর", description:"উইথড্র রিকোয়েস্ট", amount:500, type:"withdraw", status:"pending", method:"bkash", receipt:false},
+                {id:3, date:"২৩ ডিসেম্বর", description:"রেফারেল বোনাস", amount:100, type:"income", status:"completed", method:"referral", receipt:true},
+                {id:4, date:"২২ ডিসেম্বর", description:"ডিপোজিট", amount:1000, type:"deposit", status:"completed", method:"bkash", receipt:true},
+                {id:5, date:"২১ ডিসেম্বর", description:"P2P অর্ডার #ORD-004", amount:150, type:"income", status:"completed", method:"p2p", receipt:true},
+                {id:6, date:"২০ ডিসেম্বর", description:"বোনাস", amount:50, type:"income", status:"completed", method:"bonus", receipt:false}
+            ];
+            walletState.transactions = sampleTransactions.slice();
+
+            // DOM elements
+            const balanceEl = document.getElementById('balance-amount');
+            const updateBalance = () => { if(balanceEl) balanceEl.textContent = `৳${walletState.balance.toFixed(2)}`; };
+            const updateLastUpdate = () => {
+                const el = document.getElementById('last-update');
+                if(el) el.textContent = `আজ, ${new Date().toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'})}`;
+            };
+            const loadTransactions = () => {
+                const tbody = document.getElementById('transaction-body');
+                if(!tbody) return;
+                let filtered = walletState.transactions.filter(t => {
+                    if(walletState.currentFilter === 'deposit') return t.type==='deposit'||t.type==='income';
+                    if(walletState.currentFilter === 'withdraw') return t.type==='withdraw';
+                    return true;
+                });
+                if(walletState.searchQuery) {
+                    const q = walletState.searchQuery.toLowerCase();
+                    filtered = filtered.filter(t => t.date.includes(q) || t.description.includes(q) || t.amount.toString().includes(q));
+                }
+                const start = walletState.transactionOffset;
+                const end = start + walletState.transactionLimit;
+                const page = filtered.slice(start, end);
+                tbody.innerHTML = '';
+                if(page.length===0 && start===0){
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px;">কোন ট্রানজেকশন নেই</td></tr>';
+                } else {
+                    page.forEach(t => {
+                        const row = document.createElement('tr');
+                        const amountColor = (t.type==='income'||t.type==='deposit') ? '#10b981' : '#ef4444';
+                        const sign = (t.type==='income'||t.type==='deposit') ? '+' : '-';
+                        const statusClass = t.status==='completed'?'status-completed': t.status==='pending'?'status-pending':'';
+                        const statusText = t.status==='completed'?'সম্পূর্ণ': t.status==='pending'?'মুলতুবি':'বাতিল';
+                        row.innerHTML = `
+                            <td>${t.date}</td><td>${t.description}</td>
+                            <td style="color:${amountColor};">${sign}৳${t.amount.toFixed(2)}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td>${t.receipt?'<button class="btn-small" onclick="downloadReceipt('+t.id+')"><i class="fas fa-download"></i></button>':''}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+                document.getElementById('load-more-btn').style.display = (end >= filtered.length) ? 'none' : 'inline-block';
+            };
+
+            // helpers
+            window.showNotification = (msg, type='info') => {
+                const n = document.createElement('div');
+                n.className = 'notification-toast';
+                n.style.background = type==='success'?'#10b981':type==='error'?'#ef4444':'#4361ee';
+                n.textContent = msg;
+                document.body.appendChild(n);
+                setTimeout(() => n.remove(), 2800);
+            };
+
+            // deposit
+            document.getElementById('deposit-btn')?.addEventListener('click', ()=>{
+                const amt = parseFloat(document.getElementById('deposit-amount')?.value) || 0;
+                if(amt<100) return showNotification('ন্যূনতম ১০০', 'error');
+                const loader = document.getElementById('deposit-loader');
+                loader.style.display = 'block';
+                setTimeout(()=>{
+                    const bonus = amt * 0.05;
+                    walletState.balance += (amt + bonus);
+                    updateBalance();
+                    walletState.transactions.unshift({id:Date.now(), date:new Date().getDate()+' তারিখ', description:'ডিপোজিট', amount:amt+bonus, type:'deposit', status:'completed', receipt:true});
+                    loadTransactions();
+                    loader.style.display = 'none';
+                    showNotification(`ডিপোজিট সফল + বোনাস ৳${bonus.toFixed(2)}`, 'success');
+                    updateLastUpdate();
+                },1000);
+            });
+
+            // withdraw
+            document.getElementById('withdraw-btn')?.addEventListener('click', ()=>{
+                const amt = parseFloat(document.getElementById('withdraw-amount')?.value) || 0;
+                if(amt<100 || amt>walletState.balance) return showNotification('অকারেন্ট পরিমাণ', 'error');
+                walletState.pendingWithdrawal = {amount:amt, method:document.getElementById('withdraw-method')?.value, phone:document.getElementById('withdraw-phone')?.value};
+                document.getElementById('otp-phone').textContent = walletState.pendingWithdrawal.phone;
+                document.getElementById('otp-modal').style.display = 'flex';
+                walletState.currentOTP = '123456'; // demo
+                startTimer();
+            });
+
+            function startTimer(){ let t=119; const timer=document.getElementById('otp-timer'); const int=setInterval(()=>{ if(t<=0){clearInterval(int); timer.textContent='মেয়াদ শেষ';} else timer.textContent=`${Math.floor(t/60)}:${(t--%60).toString().padStart(2,'0')}`; },1000); }
+
+            window.verifyOTP = ()=>{
+                let code = '';
+                for(let i=1;i<=6;i++) code += document.getElementById(`otp${i}`)?.value || '';
+                if(code !== walletState.currentOTP) return showNotification('ভুল OTP', 'error');
+                closeOTPModal();
+                const w = walletState.pendingWithdrawal; if(!w) return;
+                const fee = 5; const rec = w.amount - fee;
+                walletState.balance -= w.amount;
+                updateBalance();
+                walletState.transactions.unshift({id:Date.now(), date:new Date().getDate()+' তারিখ', description:`উইথড্র (${w.method})`, amount:w.amount, type:'withdraw', status:'pending', receipt:true});
+                loadTransactions();
+                showNotification('উইথড্র রিকোয়েস্ট পাঠানো হয়েছে', 'success');
+                walletState.pendingWithdrawal = null;
+                setTimeout(()=>{
+                    const txn = walletState.transactions.find(t=>t.status==='pending' && t.type==='withdraw');
+                    if(txn) txn.status='completed'; loadTransactions(); showNotification('উইথড্র সম্পন্ন', 'info');
+                },60000);
+            };
+            window.closeOTPModal = ()=> document.getElementById('otp-modal').style.display='none';
+
+            // quick
+            document.getElementById('quick-deposit')?.addEventListener('click',()=> document.getElementById('deposit-card')?.scrollIntoView({behavior:'smooth'}));
+            document.getElementById('quick-withdraw')?.addEventListener('click',()=> document.querySelector('.card')?.scrollIntoView({behavior:'smooth'}));
+
+            // export toggle
+            document.getElementById('export-transactions')?.addEventListener('click',()=> document.getElementById('export-options').classList.toggle('show'));
+
+            // theme
+            document.getElementById('theme-toggle')?.addEventListener('click', ()=>{
+                document.body.classList.toggle('light-mode');
+                const icon = document.querySelector('#theme-toggle i');
+                if(document.body.classList.contains('light-mode')) icon.className = 'fas fa-sun';
+                else icon.className = 'fas fa-moon';
+            });
+
+            // search
+            window.searchTransactions = ()=>{
+                walletState.searchQuery = document.getElementById('search-transaction').value;
+                walletState.transactionOffset = 0;
+                loadTransactions();
+            };
+            window.filterTransactions = (type)=>{
+                walletState.currentFilter = type;
+                walletState.transactionOffset = 0;
+                document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+                document.getElementById(`filter-${type}`)?.classList.add('active');
+                loadTransactions();
+            };
+            window.loadMoreTransactions = ()=>{
+                walletState.transactionOffset += walletState.transactionLimit;
+                loadTransactions();
+            };
+            window.downloadReceipt = (id)=> showNotification('রিসিট ডাউনলোড (demo)', 'success');
+            window.exportTransactions = (f)=> showNotification(`${f} export demo`, 'info');
+            window.goToPage = (p)=> showNotification(`${p} পেজ (demo)`, 'info');
+            window.showLimitSettings = ()=>{
+                let newLimit = prompt('ডেইলি লিমিট', walletState.dailyLimit);
+                if(newLimit) walletState.dailyLimit = +newLimit;
+            };
+            window.resendOTP = ()=> showNotification('OTP resent (123456)', 'info');
+
+            // payment ranking select
+            document.querySelectorAll('.payment-ranking').forEach(el=>{
+                el.addEventListener('click', function(){
+                    document.querySelectorAll('.payment-ranking').forEach(r=>r.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // back button
+            document.getElementById('back-btn')?.addEventListener('click', ()=> showNotification('ব্যাক', 'info'));
+
+            // realtime simulation
+            setInterval(()=>{
+                if(Math.random()>0.8){
+                    walletState.balance += 5;
+                    updateBalance(); updateLastUpdate();
+                }
+            }, 20000);
+
+            // calculate receivable
+            document.getElementById('withdraw-amount')?.addEventListener('input', function(){
+                const amt = parseFloat(this.value) || 0;
+                document.getElementById('receivable-amount').textContent = `৳${Math.max(0, amt-5).toFixed(2)}`;
+            });
+
+            // initial
+            updateBalance();
+            updateLastUpdate();
+            loadTransactions();
+        })();
+    </script>
+</body>
+</html>

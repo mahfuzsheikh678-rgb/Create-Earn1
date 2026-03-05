@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>P2P | Create&Earn V5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body {
+            background: linear-gradient(145deg, #0a1620 0%, #0d1b2a 100%);
+            color: #fff; max-width: 450px; margin: 0 auto; min-height: 100vh;
+            position: relative; box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            overflow-x: hidden; backdrop-filter: blur(2px);
+        }
+        .glass-card {
+            background: rgba(22, 33, 62, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(76, 201, 240, 0.1) inset;
+        }
+        .container { padding: 20px 16px 95px 16px; }
+
+        /* top navbar floating */
+        .top-navbar {
+            background: rgba(10, 22, 38, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 200; border-bottom: 1px solid rgba(76,201,240,0.25);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+        .nav-icon, .top-nav-btn {
+            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: rgba(67,97,238,0.2); border: 1px solid #4cc9f0;
+            color: #4cc9f0; font-size: 20px; cursor: pointer; transition: 0.2s;
+        }
+        .app-title {
+            font-size: 24px; font-weight: 700;
+            background: linear-gradient(130deg, #a0d9ff, #4cc9f0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .top-nav-buttons { display: flex; gap: 8px; }
+        .notification-badge {
+            position: absolute; top: -3px; right: -3px; width: 18px; height: 18px;
+            background: #ff4757; border-radius: 50%; font-size: 10px; display: flex;
+            align-items: center; justify-content: center; box-shadow: 0 0 8px #ff4757;
+        }
+
+        /* bottom nav 6 items */
+        .bottom-nav {
+            position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 24px); max-width: 420px;
+            background: rgba(10, 22, 38, 0.8); backdrop-filter: blur(20px);
+            border-radius: 40px; padding: 8px 12px; display: flex; justify-content: space-around;
+            border: 1px solid rgba(76,201,240,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            z-index: 300;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #8aacff; font-size: 12px; gap: 2px; cursor: pointer; transition: 0.2s;
+            padding: 6px 10px; border-radius: 30px;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { background: #4361ee30; color: #4cc9f0; text-shadow: 0 0 8px #4cc9f0; }
+
+        /* wishlist */
+        .wishlist-section {
+            background: rgba(22,33,62,0.5); backdrop-filter: blur(8px); border-radius: 32px;
+            padding: 18px; margin-bottom: 24px; border: 1px solid #4cc9f030;
+            box-shadow: 0 20px 40px -10px black;
+        }
+        .wishlist-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .wishlist-title { color: #4cc9f0; font-weight: 600; font-size: 18px; }
+        .wishlist-count { background: #4361ee; padding: 2px 16px; border-radius: 40px; font-weight: 600; }
+        .wishlist-items {
+            display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
+            scrollbar-width: thin; scrollbar-color: #4cc9f0 #16213e;
+        }
+        .wishlist-item {
+            min-width: 140px; background: rgba(67,97,238,0.2); backdrop-filter: blur(4px);
+            border: 1px solid #4cc9f0; border-radius: 24px; padding: 14px; position: relative;
+            box-shadow: 0 8px 20px #00000060;
+        }
+        .wishlist-item-favorite { position: absolute; top: 8px; right: 10px; color: #ff4757; }
+        .wishlist-item-name { font-weight: 600; color: white; }
+        .wishlist-item-price { font-size: 20px; font-weight: 700; color: #10b981; }
+        .wishlist-item-action {
+            background: linear-gradient(145deg, #4361ee, #4cc9f0);
+            border: none; border-radius: 40px; padding: 6px 12px; color: white; width: 100%; margin-top: 6px; cursor: pointer;
+        }
+
+        /* search */
+        .search-container { margin: 20px 0; position: relative; }
+        .search-bar {
+            width: 100%; padding: 16px 20px 16px 50px;
+            background: rgba(22,33,62,0.7); backdrop-filter: blur(10px);
+            border: 1px solid #4361ee60; border-radius: 60px; color: white; font-size: 16px;
+        }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #4cc9f0; }
+
+        /* filter pills */
+        .sell-style-buttons {
+            display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0;
+        }
+        .sell-style-btn {
+            background: rgba(22,33,62,0.7); backdrop-filter: blur(8px);
+            border: 1px solid #4361ee; border-radius: 40px; padding: 10px 18px;
+            color: #4cc9f0; font-weight: 500; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; flex: 1 0 auto; justify-content: center;
+        }
+        .sell-style-btn.active { background: linear-gradient(145deg, #4361ee, #4cc9f0); color: white; }
+
+        /* stats card */
+        .stats-card-slot {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;
+        }
+        .stat-slot {
+            background: rgba(67,97,238,0.15); backdrop-filter: blur(4px);
+            border-radius: 24px; padding: 14px; text-align: center; border: 1px solid #4cc9f040;
+        }
+        .slot-label { color: #a0b5ff; font-size: 13px; }
+        .slot-value { color: #4cc9f0; font-size: 24px; font-weight: 700; }
+
+        /* price box card — premium floating */
+        .price-box-card {
+            background: rgba(22,33,62,0.6); backdrop-filter: blur(16px);
+            border: 1px solid rgba(76,201,240,0.35); border-radius: 36px;
+            padding: 22px 18px; margin-bottom: 20px;
+            box-shadow: 0 25px 40px -12px black, 0 0 0 1px rgba(76,201,240,0.2) inset;
+            position: relative; transition: transform 0.25s ease, box-shadow 0.3s;
+            animation: floatIn 0.5s ease forwards; opacity: 0; transform: translateY(20px);
+        }
+        @keyframes floatIn { to { opacity: 1; transform: translateY(0); } }
+        .price-box-card:hover { transform: translateY(-6px); box-shadow: 0 30px 50px -15px #000; }
+
+        .favorite-btn {
+            position: absolute; top: 20px; right: 20px; font-size: 22px;
+            color: #ff4757; text-shadow: 0 0 15px #ff4757; cursor: pointer; z-index: 10;
+            transition: 0.2s;
+        }
+        .favorite-btn.active { color: #ff4757; transform: scale(1.1); }
+
+        .p2p-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .user-name { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .verified-badge { background: #4361ee; padding: 4px 8px; border-radius: 40px; font-size: 10px; display: inline-flex; gap: 4px; }
+        .premium-badge { background: linear-gradient(145deg, #f59e0b, #fbbf24); padding: 4px 10px; border-radius: 40px; font-size: 10px; font-weight: 600; }
+        .status-badge { padding: 4px 12px; border-radius: 40px; font-size: 11px; background: #1e3a5f; }
+        .status-active { background: #10b98120; color: #10b981; border: 1px solid #10b981; }
+        .status-pending { background: #f59e0b20; color: #f59e0b; border: 1px solid #f59e0b; }
+        .status-completed { background: #4361ee20; color: #4cc9f0; border: 1px solid #4cc9f0; }
+        .time-badge { font-size: 12px; color: #aab9ff; display: flex; align-items: center; gap: 5px; margin: 5px 0; }
+        .price-box {
+            background: linear-gradient(145deg, #10b981, #34d399); padding: 10px 20px; border-radius: 60px;
+            font-weight: 800; font-size: 22px; box-shadow: 0 8px 20px #10b98160;
+        }
+        .rating-stars { margin: 12px 0 6px; display: flex; align-items: center; gap: 4px; }
+        .star { color: #ffd700; margin-right: 2px; }
+        .rating-value { color: #f59e0b; font-weight: 700; margin-left: 6px; }
+        .review-count { color: #8895c0; font-size: 13px; }
+
+        /* progress container clickable */
+        .progress-container {
+            background: rgba(0,0,0,0.3); border-radius: 60px; padding: 4px 0; cursor: pointer;
+            margin: 15px 0 8px; transition: 0.2s;
+        }
+        .progress-bar { height: 12px; background: #1e3a5f; border-radius: 60px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4cc9f0, #4361ee); width: 0%; transition: width 0.8s cubic-bezier(0.2, 0.9, 0.3, 1); }
+        .progress-text { display: flex; justify-content: space-between; font-size: 14px; color: #ccd6ff; margin-top: 4px; }
+        .limit-text { font-size: 13px; color: #a0b0e0; margin: 10px 0 8px; background: #1e3a5f40; padding: 6px 12px; border-radius: 40px; display: inline-block; }
+
+        /* three button row (submit, review, remove) */
+        .three-button-row {
+            display: flex; gap: 10px; margin: 18px 0 8px;
+        }
+        .three-btn {
+            flex: 1; padding: 12px 0; border-radius: 50px; border: none; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(12px);
+            border: 1px solid #4cc9f0; color: #4cc9f0; cursor: pointer; transition: 0.2s;
+        }
+        .three-btn-primary { background: #4361ee; color: white; border: none; box-shadow: 0 8px 20px #4361ee80; }
+        .three-btn-warning { background: #f59e0b; color: white; border: none; }
+        .three-btn-danger { background: #ef4444; color: white; border: none; }
+
+        /* full width rating button (below three-button-row) */
+        .give-rating-btn {
+            background: transparent; border: 1px solid #f59e0b; color: #f59e0b;
+            border-radius: 60px; padding: 12px 18px; width: 100%; font-size: 15px;
+            display: flex; align-items: center; gap: 8px; justify-content: center;
+            cursor: pointer; margin-top: 6px; transition: 0.2s;
+        }
+        .give-rating-btn:hover { background: #f59e0b20; }
+
+        /* modals - compact and animated */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-card {
+            background: #16213e; border: 1px solid #4cc9f0; border-radius: 48px;
+            padding: 24px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 30px 70px #000, 0 0 0 1px #4cc9f0 inset;
+            transform: scale(0.95) translateY(20px); transition: 0.3s;
+        }
+        .modal-overlay.active .modal-card { transform: scale(1) translateY(0); }
+        .modal-header { text-align: center; margin-bottom: 20px; }
+        .modal-header h3 { color: #4cc9f0; font-size: 26px; }
+        .submission-info { background: #1e3a5f; border-radius: 30px; padding: 16px; margin: 10px 0; }
+        .submitted-gmails-list { max-height: 200px; overflow-y: auto; background: #0d1b2a; border-radius: 24px; padding: 12px; }
+        .submitted-gmail-item { background: #1e3a5f; border-radius: 20px; padding: 10px; margin-bottom: 8px; border-left: 4px solid #4cc9f0; }
+        .form-input { width: 100%; padding: 14px; background: #1e3a5f; border: 1px solid #4cc9f0; border-radius: 60px; color: white; margin-bottom: 12px; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-btn { flex: 1; padding: 14px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; background: #1e3a5f; color: #4cc9f0; border: 1px solid #4cc9f0; }
+        .modal-btn-submit { background: #4361ee; color: white; border: none; }
+
+        /* rating stars large */
+        .rating-stars-large { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+        .star-large { font-size: 40px; color: #3a4f70; cursor: pointer; transition: 0.15s; }
+        .star-large.active, .star-large:hover { color: #ffd700; text-shadow: 0 0 20px gold; }
+
+        .review-item { background: #1e3a5f; border-radius: 24px; padding: 16px; margin-bottom: 12px; }
+        .review-user { font-weight: 700; color: #4cc9f0; }
+        .review-date { color: #a0b0e0; font-size: 11px; }
+        .confirmation-icon { font-size: 60px; color: #ef4444; text-align: center; margin-bottom: 10px; }
+
+        /* notification toast */
+        .notification-msg-box {
+            position: fixed; bottom: 90px; left: 20px; right: 20px;
+            background: #16213e; border: 1px solid #4cc9f0; border-radius: 40px;
+            padding: 16px; z-index: 400; display: none; backdrop-filter: blur(16px);
+        }
+        .notification-msg-box.active { display: block; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } }
+    </style>
+</head>
+<body>
+    <!-- top navbar -->
+    <header class="top-navbar">
+        <div class="nav-icon" id="back-btn"><i class="fas fa-arrow-left"></i></div>
+        <div class="app-title">P2P Market</div>
+        <div class="top-nav-buttons">
+            <div class="top-nav-btn" id="wallet-btn"><i class="fas fa-wallet"></i></div>
+            <div class="top-nav-btn" id="notification-btn"><i class="fas fa-bell"></i><span class="notification-badge">5</span></div>
+        </div>
+    </header>
+
+    <!-- bottom nav 6 items -->
+    <div class="bottom-nav">
+        <div class="nav-item active"><i class="fas fa-home"></i><span>P2P</span></div>
+        <div class="nav-item"><i class="fas fa-clipboard-list"></i><span>অর্ডার</span></div>
+        <div class="nav-item"><i class="fas fa-cart-plus"></i><span>Buy</span></div>
+        <div class="nav-item"><i class="fas fa-tag"></i><span>Sell</span></div>
+        <div class="nav-item"><i class="fas fa-qrcode"></i><span>Generate</span></div>
+        <div class="nav-item"><i class="fas fa-user"></i><span>Profile</span></div>
+    </div>
+
+    <!-- notification message -->
+    <div class="notification-msg-box" id="notification-msg-box">
+        <div style="display:flex; justify-content:space-between;">
+            <span style="color:#4cc9f0;">Gmail সাবমিট</span>
+            <span id="close-notification-msg" style="cursor:pointer;">✖</span>
+        </div>
+        <div id="notification-msg-content"></div>
+    </div>
+
+    <!-- main container -->
+    <div class="container">
+        <!-- wishlist -->
+        <div class="wishlist-section">
+            <div class="wishlist-header">
+                <span class="wishlist-title"><i class="fas fa-heart" style="color:#ff4757;"></i> আমার পছন্দের Buyer</span>
+                <span class="wishlist-count" id="wishlist-count">0 জন</span>
+            </div>
+            <div id="wishlist-container" class="wishlist-items"></div>
+        </div>
+
+        <!-- search -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" id="p2p-search" placeholder="সার্চ (নাম, আইডি...)">
+        </div>
+
+        <!-- filter row (fully functional now) -->
+        <div class="sell-style-buttons">
+            <div class="sell-style-btn active" id="new-order-btn"><i class="fas fa-plus-circle"></i> নতুন</div>
+            <div class="sell-style-btn" id="filter-btn"><i class="fas fa-filter"></i> ফিল্টার</div>
+            <div class="sell-style-btn" id="sort-btn"><i class="fas fa-sort-amount-down"></i> সর্ট</div>
+            <div class="sell-style-btn" id="advanced-filter-btn"><i class="fas fa-sliders-h"></i> এডভান্সড</div>
+        </div>
+
+        <!-- stats card -->
+        <div class="glass-card" style="border-radius:40px; padding:20px; margin-bottom:20px;">
+            <h3 style="color:#4cc9f0;">📊 সক্রিয় অর্ডার</h3>
+            <div class="stats-card-slot">
+                <div class="stat-slot"><div class="slot-label">মোট</div><div class="slot-value">18</div></div>
+                <div class="stat-slot"><div class="slot-label">সক্রিয়</div><div class="slot-value">12</div></div>
+                <div class="stat-slot"><div class="slot-label">সম্পূর্ণ</div><div class="slot-value">5</div></div>
+                <div class="stat-slot"><div class="slot-label">বাতিল</div><div class="slot-value">1</div></div>
+            </div>
+        </div>
+
+        <!-- price box container -->
+        <div id="price-box-container"></div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Gmail submission modal -->
+    <div class="modal-overlay" id="submission-modal">
+        <div class="modal-card">
+            <div class="modal-header"><h3>📬 Gmail সাবমিট</h3><p id="submission-worker-name" style="color:#aaa;"></p></div>
+            <div class="submission-info" id="submission-info"></div>
+            <div id="submitted-gmails-list" class="submitted-gmails-list"></div>
+            <div style="margin-top:16px;">
+                <input type="email" class="form-input" id="new-gmail" placeholder="new@gmail.com">
+                <button class="modal-btn modal-btn-submit" id="submit-gmail-btn"><i class="fas fa-paper-plane"></i> সাবমিট</button>
+            </div>
+            <div class="modal-buttons"><button class="modal-btn" id="close-submission-btn">বন্ধ</button></div>
+        </div>
+    </div>
+
+    <!-- Review modal -->
+    <div class="modal-overlay" id="review-modal">
+        <div class="modal-card" style="max-width:420px;">
+            <div class="modal-header"><h3>⭐ রিভিউ</h3><p id="review-modal-subtitle"></p></div>
+            <div id="reviews-container" style="max-height:400px; overflow-y:auto;"></div>
+            <div class="modal-buttons"><button class="modal-btn" id="close-review-btn">বন্ধ</button></div>
+        </div>
+    </div>
+
+    <!-- Rating modal -->
+    <div class="modal-overlay" id="rating-modal">
+        <div class="modal-card">
+            <div class="modal-header"><h3>রেটিং দিন</h3><p id="rating-worker-name"></p></div>
+            <div class="rating-stars-large" id="rating-stars-large">
+                <i class="far fa-star star-large" data-rating="1"></i><i class="far fa-star star-large" data-rating="2"></i><i class="far fa-star star-large" data-rating="3"></i><i class="far fa-star star-large" data-rating="4"></i><i class="far fa-star star-large" data-rating="5"></i>
+            </div>
+            <div style="text-align:center;">রেটিং: <span id="selected-rating">0</span>/5</div>
+            <textarea class="form-input" id="rating-feedback" placeholder="মন্তব্য (ঐচ্ছিক)" style="border-radius:24px;"></textarea>
+            <div class="modal-buttons"><button class="modal-btn" id="cancel-rating-btn">বাতিল</button><button class="modal-btn modal-btn-submit" id="submit-rating-btn">সাবমিট</button></div>
+        </div>
+    </div>
+
+    <!-- Confirmation modal (delete) -->
+    <div class="modal-overlay" id="confirmation-modal">
+        <div class="modal-card" style="text-align:center;">
+            <div class="confirmation-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 id="confirmation-title">অর্ডার মুছবেন?</h3>
+            <p id="confirmation-message" style="margin:16px 0;"></p>
+            <div class="modal-buttons"><button class="modal-btn" id="cancel-confirmation-btn">না</button><button class="modal-btn modal-btn-submit" style="background:#ef4444;" id="confirm-action-btn">হ্যাঁ, মুছুন</button></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- APP STATE ----------
+            let appState = {
+                priceBoxes: [
+                    { id:1, name:"রফিকুল ইসলাম", price:"2.5৳", status:"active", progress:65, limit:"65/100", date:"৩০ ডিসেম্বর", timeAgo:"৬ ঘন্টা আগে", timestamp:Date.now()-21600000, rating:4.5, reviews:12, isVerified:true, isPremium:false, type:"gmail", isFavorite:false, reviewList:[ { user:"মোঃ রাজু", rating:5, date:"২৯ ডিসেম্বর", comment:"খুব ভালো" }, { user:"সাবিনা", rating:4, date:"২৮ ডিসেম্বর", comment:"ভালো" } ] },
+                    { id:2, name:"সুমাইয়া আক্তার", price:"3.5৳", status:"completed", progress:100, limit:"100/100", date:"আজ", timeAgo:"২ মিনিট আগে", timestamp:Date.now()-120000, rating:4.8, reviews:25, isVerified:true, isPremium:true, type:"linkedin", isFavorite:true, reviewList:[ { user:"ফারহানা", rating:5, date:"আজ", comment:"সেরা!" } ] },
+                    { id:3, name:"আব্দুল করিম", price:"2.0৳", status:"pending", progress:25, limit:"25/100", date:"২৮ ডিসেম্বর", timeAgo:"২ দিন আগে", timestamp:Date.now()-172800000, rating:3.2, reviews:5, isVerified:false, isPremium:false, type:"textnow", isFavorite:false, reviewList:[] },
+                    { id:4, name:"মোহাম্মদ আলী", price:"4.0৳", status:"active", progress:80, limit:"80/100", date:"আজ", timeAgo:"১ ঘন্টা আগে", timestamp:Date.now()-3600000, rating:4.9, reviews:32, isVerified:true, isPremium:true, type:"gmail", isFavorite:true, reviewList:[ { user:"রহিমা", rating:5, date:"আজ", comment:"অসাধারণ" } ] },
+                    { id:5, name:"ফারহানা ইয়াসমিন", price:"3.0৳", status:"active", progress:45, limit:"45/100", date:"২৯ ডিসেম্বর", timeAgo:"১২ ঘন্টা আগে", timestamp:Date.now()-43200000, rating:4.3, reviews:18, isVerified:true, isPremium:false, type:"facebook", isFavorite:false, reviewList:[] }
+                ],
+                gmailSubmissions: {},
+                currentSubmissionOrderId: null,
+                currentRatingOrderId: null,
+                currentRating: 0,
+                currentDeletingOrderId: null,
+                filter: 'all',
+                sort: 'date-new'
+            };
+
+            // init gmail submissions
+            appState.priceBoxes.forEach(b => appState.gmailSubmissions[b.id] = []);
+            appState.gmailSubmissions[1] = [ { email:"tamim6556@gmail.com", time:"২ ঘন্টা আগে" }, { email:"rahman@gmail.com", time:"৪ ঘন্টা আগে" } ];
+            appState.gmailSubmissions[2] = [ { email:"sumaiya@gmail.com", time:"১ ঘন্টা আগে" } ];
+            appState.gmailSubmissions[4] = [ { email:"ali123@gmail.com", time:"৩০ মিনিট আগে" }, { email:"karim@gmail.com", time:"২ ঘন্টা আগে" } ];
+
+            // ---------- RENDER FUNCTIONS ----------
+            function loadPriceBoxes() {
+                let filtered = [...appState.priceBoxes];
+                if (appState.filter === 'active') filtered = filtered.filter(b => b.status === 'active');
+                else if (appState.filter === 'completed') filtered = filtered.filter(b => b.status === 'completed');
+                else if (appState.filter === 'pending') filtered = filtered.filter(b => b.status === 'pending');
+                else if (appState.filter === 'verified') filtered = filtered.filter(b => b.isVerified);
+                else if (appState.filter === 'premium') filtered = filtered.filter(b => b.isPremium);
+
+                if (appState.sort === 'date-new') filtered.sort((a,b) => b.timestamp - a.timestamp);
+                else if (appState.sort === 'price-low') filtered.sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
+                else if (appState.sort === 'price-high') filtered.sort((a,b) => parseFloat(b.price) - parseFloat(a.price));
+
+                const container = document.getElementById('price-box-container');
+                container.innerHTML = '';
+                filtered.forEach((box, idx) => {
+                    const subsCount = appState.gmailSubmissions[box.id]?.length || 0;
+                    const stars = Array(5).fill(0).map((_,i) => i+1 <= Math.floor(box.rating) ? '<i class="fas fa-star star"></i>' : (i+0.5 <= box.rating ? '<i class="fas fa-star-half-alt star"></i>' : '<i class="far fa-star star"></i>')).join('');
+                    const statusClass = box.status === 'active' ? 'status-active' : box.status === 'pending' ? 'status-pending' : 'status-completed';
+                    const favClass = box.isFavorite ? 'active' : '';
+                    const timeIcon = box.timeAgo.includes('মিনিট') ? 'fa-clock' : (box.timeAgo.includes('ঘন্টা') ? 'fa-hourglass-half' : 'fa-calendar-day');
+                    const badges = (box.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> verified</span>' : '') + (box.isPremium ? '<span class="premium-badge"><i class="fas fa-crown"></i> premium</span>' : '');
+                    
+                    const card = document.createElement('div');
+                    card.className = 'price-box-card';
+                    card.dataset.id = box.id;
+                    card.style.animationDelay = idx*0.1+'s';
+                    card.innerHTML = `
+                        <div class="favorite-btn ${favClass}" data-id="${box.id}"><i class="fas fa-heart"></i></div>
+                        <div class="p2p-card-header">
+                            <div>
+                                <span class="user-name">${box.name} ${badges} <span class="status-badge ${statusClass}">${box.status}</span></span>
+                                <div class="time-badge"><i class="fas ${timeIcon}"></i> ${box.timeAgo}</div>
+                                <div style="font-size:12px; color:#aab9ff;">ID:#ORD-00${box.id} | টাইপ:${box.type.toUpperCase()} | 📧 ${subsCount}</div>
+                            </div>
+                            <div class="price-box">${box.price}</div>
+                        </div>
+                        <div class="rating-stars">${stars} <span class="rating-value">${box.rating}</span><span class="review-count">(${box.reviews})</span></div>
+                        <!-- progress clickable -->
+                        <div class="progress-container" data-id="${box.id}">
+                            <div class="progress-bar"><div class="progress-fill" style="width:${box.progress}%"></div></div>
+                            <div class="progress-text"><span><i class="fas fa-eye" style="color:#4cc9f0;"></i> অর্ডার সম্পূর্ণ</span><span>${box.progress}%</span></div>
+                        </div>
+                        <div class="limit-text">সীমা: ${box.limit} | শেষ: ${box.date}</div>
+                        <!-- three button row (submit, review, remove) -->
+                        <div class="three-button-row">
+                            <button class="three-btn three-btn-primary submit-main" data-id="${box.id}"><i class="fas fa-paper-plane"></i> সাবমিট</button>
+                            <button class="three-btn three-btn-warning review-btn" data-id="${box.id}" data-name="${box.name}"><i class="fas fa-star"></i> রিভিউ</button>
+                            <button class="three-btn three-btn-danger delete-btn" data-id="${box.id}"><i class="fas fa-trash"></i> মুছুন</button>
+                        </div>
+                        <!-- full width rating button below -->
+                        <button class="give-rating-btn rating-btn" data-id="${box.id}" data-name="${box.name}"><i class="fas fa-star"></i> রেটিং দিন</button>
+                    `;
+                    container.appendChild(card);
+                });
+                // after render, progress fill animation
+                setTimeout(() => {
+                    document.querySelectorAll('.progress-fill').forEach(el => { let w = el.style.width; el.style.width = '0'; setTimeout(()=> el.style.width = w, 50); });
+                }, 100);
+            }
+
+            function loadWishlist() {
+                const favs = appState.priceBoxes.filter(b => b.isFavorite);
+                const container = document.getElementById('wishlist-container');
+                document.getElementById('wishlist-count').innerText = favs.length + ' জন';
+                if (!favs.length) {
+                    container.innerHTML = '<div class="wishlist-empty" style="padding:20px;color:#aaa;text-align:center;"><i class="far fa-heart fa-3x"></i><p>কোন পছন্দের Buyer নেই</p><p style="font-size:13px;">❤️ আইকনে ক্লিক করুন</p></div>';
+                    return;
+                }
+                let html = '';
+                favs.forEach(b => { html += `<div class="wishlist-item"><div class="wishlist-item-favorite"><i class="fas fa-heart"></i></div><div class="wishlist-item-name">${b.name}</div><div class="wishlist-item-price">${b.price}</div><div><i class="fas fa-star" style="color:gold;"></i> ${b.rating}</div><button class="wishlist-item-action" onclick="quickView(${b.id})">দেখুন</button></div>`; });
+                container.innerHTML = html;
+            }
+            window.quickView = (id) => { 
+                const el = document.querySelector(`.price-box-card[data-id="${id}"]`);
+                if(el) { el.scrollIntoView({behavior:'smooth'}); el.style.border='2px solid #4cc9f0'; setTimeout(()=>el.style.border='',1500); }
+            };
+
+            // toggle favorite (fixed)
+            function toggleFavorite(id) {
+                const box = appState.priceBoxes.find(b => b.id === id);
+                if (box) { box.isFavorite = !box.isFavorite; loadPriceBoxes(); loadWishlist(); showToast(box.isFavorite ? 'পছন্দে যোগ করা হয়েছে' : 'পছন্দ থেকে সরানো হয়েছে'); }
+            }
+
+            // Gmail submission functions
+            function openSubmissionModal(id) {
+                const box = appState.priceBoxes.find(b => b.id === id); if(!box) return;
+                appState.currentSubmissionOrderId = id;
+                document.getElementById('submission-worker-name').innerText = box.name + ' | অর্ডার #'+id;
+                document.getElementById('submission-info').innerHTML = `<div>মূল্য: ${box.price} | অগ্রগতি: ${box.progress}% | সীমা: ${box.limit}</div>`;
+                loadSubmissionsList(id);
+                document.getElementById('submission-modal').classList.add('active');
+            }
+            function loadSubmissionsList(id) {
+                const list = appState.gmailSubmissions[id] || [];
+                const container = document.getElementById('submitted-gmails-list');
+                if (!list.length) container.innerHTML = '<div class="no-submissions">কোন Gmail নেই</div>';
+                else container.innerHTML = list.map(g => `<div class="submitted-gmail-item"><i class="fas fa-envelope"></i> ${g.email} <span style="float:right;">${g.time}</span></div>`).join('');
+            }
+            function closeSubmissionModal() { document.getElementById('submission-modal').classList.remove('active'); }
+
+            // review modal
+            function openReviewModal(id, name) {
+                const box = appState.priceBoxes.find(b => b.id === id);
+                if(!box) return;
+                document.getElementById('review-modal-subtitle').innerText = `${name} | রেটিং: ${box.rating} (${box.reviews} টি)`;
+                const container = document.getElementById('reviews-container');
+                if(!box.reviewList?.length) container.innerHTML = '<div class="no-reviews">কোন রিভিউ নেই</div>';
+                else container.innerHTML = box.reviewList.map(r => `<div class="review-item"><div class="review-user">${r.user} <span class="review-date">${r.date}</span></div><div>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div>${r.comment}</div></div>`).join('');
+                document.getElementById('review-modal').classList.add('active');
+            }
+            // rating modal
+            function openRatingModal(id, name) {
+                appState.currentRatingOrderId = id; appState.currentRating = 0;
+                document.getElementById('rating-worker-name').innerText = name;
+                document.getElementById('selected-rating').innerText = '0';
+                document.querySelectorAll('#rating-stars-large .star-large').forEach(s => s.className = 'far fa-star star-large');
+                document.getElementById('rating-modal').classList.add('active');
+            }
+
+            // EVENT DELEGATION (all clicks)
+            document.addEventListener('click', (e) => {
+                // favorite button
+                if (e.target.closest('.favorite-btn')) {
+                    const btn = e.target.closest('.favorite-btn');
+                    const id = parseInt(btn.dataset.id);
+                    toggleFavorite(id);
+                    e.preventDefault();
+                }
+                // progress container (open submission)
+                else if (e.target.closest('.progress-container')) {
+                    const id = e.target.closest('.progress-container').dataset.id;
+                    if(id) openSubmissionModal(parseInt(id));
+                }
+                // submit button (main three-btn row)
+                else if (e.target.closest('.submit-main')) {
+                    const id = e.target.closest('.submit-main').dataset.id;
+                    openSubmissionModal(parseInt(id));
+                }
+                // review button
+                else if (e.target.closest('.review-btn')) {
+                    const btn = e.target.closest('.review-btn');
+                    openReviewModal(parseInt(btn.dataset.id), btn.dataset.name);
+                }
+                // delete button
+                else if (e.target.closest('.delete-btn')) {
+                    const id = parseInt(e.target.closest('.delete-btn').dataset.id);
+                    const box = appState.priceBoxes.find(b => b.id === id);
+                    document.getElementById('confirmation-message').innerText = `${box?.name} (অর্ডার #${id}) মুছবেন?`;
+                    appState.currentDeletingOrderId = id;
+                    document.getElementById('confirmation-modal').classList.add('active');
+                }
+                // rating button (full width)
+                else if (e.target.closest('.rating-btn')) {
+                    const btn = e.target.closest('.rating-btn');
+                    openRatingModal(parseInt(btn.dataset.id), btn.dataset.name);
+                }
+            });
+
+            // submit gmail
+            document.getElementById('submit-gmail-btn').addEventListener('click', ()=>{
+                const id = appState.currentSubmissionOrderId;
+                const inp = document.getElementById('new-gmail'); const mail = inp.value.trim();
+                if(!mail || !mail.includes('@')) { alert('সঠিক Gmail দিন'); return; }
+                if(!appState.gmailSubmissions[id]) appState.gmailSubmissions[id] = [];
+                appState.gmailSubmissions[id].push({ email: mail, time: 'এখনই' });
+                const box = appState.priceBoxes.find(b => b.id === id);
+                if(box) { let [cur,tot] = box.limit.split('/').map(Number); if(cur<tot) { cur++; box.limit = cur+'/'+tot; box.progress = Math.round((cur/tot)*100); } }
+                inp.value = ''; loadSubmissionsList(id); loadPriceBoxes();
+                document.getElementById('notification-msg-content').innerHTML = `<strong>${box?.name}</strong> এর জন্য Gmail সাবমিট: ${mail}`;
+                document.getElementById('notification-msg-box').classList.add('active'); 
+                setTimeout(()=>document.getElementById('notification-msg-box').classList.remove('active'),4000);
+            });
+
+            // rating modal stars
+            document.querySelectorAll('#rating-stars-large .star-large').forEach(s => s.addEventListener('click', (e) => {
+                let r = parseInt(e.target.dataset.rating); appState.currentRating = r;
+                document.getElementById('selected-rating').innerText = r;
+                document.querySelectorAll('#rating-stars-large .star-large').forEach((st,i) => st.className = i<r ? 'fas fa-star star-large active' : 'far fa-star star-large');
+            }));
+            document.getElementById('submit-rating-btn').addEventListener('click', ()=>{
+                if(!appState.currentRating) { alert('রেটিং দিন'); return; }
+                const box = appState.priceBoxes.find(b => b.id === appState.currentRatingOrderId);
+                if(box) { 
+                    box.reviewList = box.reviewList || [];
+                    box.reviewList.unshift({ user:'আপনি', rating:appState.currentRating, date:'আজ', comment:document.getElementById('rating-feedback').value || '—' });
+                    box.rating = ((box.rating*box.reviews)+appState.currentRating)/(box.reviews+1); box.rating = Math.round(box.rating*10)/10; box.reviews++;
+                    loadPriceBoxes(); alert('রেটিং দেওয়া হয়েছে');
+                }
+                document.getElementById('rating-modal').classList.remove('active');
+            });
+
+            // confirmation delete
+            document.getElementById('confirm-action-btn').addEventListener('click', ()=>{
+                const id = appState.currentDeletingOrderId;
+                appState.priceBoxes = appState.priceBoxes.filter(b => b.id !== id);
+                delete appState.gmailSubmissions[id];
+                loadPriceBoxes(); loadWishlist();
+                document.getElementById('confirmation-modal').classList.remove('active');
+                alert('অর্ডার মুছে ফেলা হয়েছে');
+            });
+
+            // close modals
+            document.getElementById('cancel-rating-btn').addEventListener('click', ()=>document.getElementById('rating-modal').classList.remove('active'));
+            document.getElementById('close-review-btn').addEventListener('click', ()=>document.getElementById('review-modal').classList.remove('active'));
+            document.getElementById('close-submission-btn').addEventListener('click', closeSubmissionModal);
+            document.getElementById('cancel-confirmation-btn').addEventListener('click', ()=>document.getElementById('confirmation-modal').classList.remove('active'));
+            document.getElementById('close-notification-msg').addEventListener('click', ()=>document.getElementById('notification-msg-box').classList.remove('active'));
+
+            // filter/sort advanced (simple implementation)
+            document.getElementById('filter-btn').addEventListener('click', ()=>{
+                let opt = prompt('ফিল্টার টাইপ: all, active, completed, pending, verified, premium');
+                if(opt && ['all','active','completed','pending','verified','premium'].includes(opt)) { appState.filter = opt; loadPriceBoxes(); }
+            });
+            document.getElementById('sort-btn').addEventListener('click', ()=>{
+                let opt = prompt('সর্ট: date-new, price-low, price-high');
+                if(opt && ['date-new','price-low','price-high'].includes(opt)) { appState.sort = opt; loadPriceBoxes(); }
+            });
+            document.getElementById('advanced-filter-btn').addEventListener('click', ()=>{
+                alert('এডভান্সড ফিল্টার ডেমো: টাইপ(gmail/linkedin) etc. সহজ করতে চাইলে কনসোল দেখুন');
+            });
+
+            // search
+            document.getElementById('p2p-search').addEventListener('input', (e)=>{
+                const term = e.target.value.toLowerCase();
+                document.querySelectorAll('.price-box-card').forEach(card => {
+                    card.style.display = card.innerText.toLowerCase().includes(term) ? 'block' : 'none';
+                });
+            });
+
+            // back, wallet, notification demo
+            document.getElementById('back-btn').addEventListener('click', ()=> alert('ব্যাক'));
+            document.getElementById('wallet-btn').addEventListener('click', ()=> alert('ওয়ালেট'));
+            document.getElementById('notification-btn').addEventListener('click', ()=> alert('নোটিফিকেশন'));
+
+            // init
+            loadPriceBoxes(); loadWishlist();
+        })();
+    </script>
+</body>
+</html>

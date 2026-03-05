@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Gmail Gen · Create&Earn V5</title>
+    <!-- streamlined & modern, all old features kept + bugfixes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Hind Siliguri',sans-serif;}
+        body{
+            background:#0D1B2A;color:#fff;max-width:450px;margin:0 auto;min-height:100vh;
+            box-shadow:0 0 30px #0000004d;overflow-x:hidden;position:relative;
+        }
+        .container{padding:20px 16px 100px;}
+
+        /* ===== top navbar with wallet & notification ===== */
+        .top-navbar{
+            background:linear-gradient(90deg,#111 0%,#16213E 100%);
+            padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+            position:sticky;top:0;z-index:100;border-bottom:1px solid #1E3A5F;
+        }
+        .nav-left, .nav-right{display:flex;gap:18px;align-items:center;}
+        .nav-icon{font-size:20px;color:#4CC9F0;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:0.2s;}
+        .nav-icon:hover{background:#1E3A5F;}
+        .app-title{font-size:22px;font-weight:700;background:linear-gradient(90deg,#4CC9F0,#4361EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .wallet-badge{background:#1E3A5F;padding:6px 14px;border-radius:40px;font-size:14px;font-weight:500;color:#4CC9F0;border:1px solid #4361EE;display:flex;gap:6px;}
+        .wallet-badge i{color:#FBBF24;}
+
+        /* ===== bottom floating navigation (6 items) ===== */
+        .bottom-nav-floating{
+            position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);
+            max-width:420px;background:rgba(17,17,17,0.85);backdrop-filter:blur(12px);
+            display:flex;justify-content:space-around;padding:10px 6px;border-radius:40px;
+            border:1px solid #1E3A5F;box-shadow:0 8px 20px #00000080;z-index:1000;
+        }
+        .nav-item-floating{
+            display:flex;flex-direction:column;align-items:center;cursor:pointer;
+            padding:6px 8px;border-radius:30px;transition:0.2s;width:18%;
+        }
+        .nav-item-floating.active{
+            background:rgba(67,97,238,0.25);box-shadow:0 0 8px #4361EE;
+        }
+        .nav-item-floating .nav-icon{font-size:18px;color:#8A8A8A;margin-bottom:2px;width:auto;height:auto;}
+        .nav-item-floating.active .nav-icon{color:#4CC9F0;}
+        .nav-item-floating .nav-label{font-size:11px;color:#8A8A8A;font-weight:500;}
+        .nav-item-floating.active .nav-label{color:#4CC9F0;}
+
+        /* cards & UI – unified, no duplication */
+        .card{background:#16213E;border-radius:20px;padding:20px;margin-bottom:20px;border:1px solid #1E3A5F;transition:0.2s;}
+        .alert{padding:15px 18px;border-radius:18px;margin-bottom:20px;font-weight:500;}
+        .alert-info{background:#1E3A5F;border:1px solid #4361EE;color:#B0D4FF;}
+        .alert-danger{background:#2d1a25;border:1px solid #DC3545;color:#FF8A8A;}
+        .alert-success{background:#0f2e20;border:1px solid #10B981;color:#9AEFC7;}
+
+        .sell-style-buttons{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap;}
+        .sell-style-btn{
+            padding:10px 18px;border-radius:40px;background:#1E3A5F;border:1px solid #4361EE;
+            color:#4CC9F0;font-weight:600;cursor:pointer;transition:0.2s;display:flex;gap:6px;align-items:center;
+        }
+        .sell-style-btn.active{background:linear-gradient(90deg,#4361EE,#4CC9F0);color:white;}
+
+        .form-group{background:#16213E;border-radius:20px;padding:20px;margin-bottom:20px;border:1px solid #1E3A5F;}
+        .form-label{display:block;margin-bottom:8px;font-weight:500;color:#C5C5C5;}
+        .required-star{color:#EF4444;}
+        .input-with-buttons{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+        .form-control{
+            flex:1;padding:14px 16px;background:#1E3A5F;border:1px solid #2A4A7A;
+            border-radius:16px;color:#fff;font-size:16px;transition:0.2s;
+        }
+        .form-control:focus{outline:none;border-color:#4361EE;}
+
+        .mini-buttons-container{display:flex;gap:6px;}
+        .mini-btn{width:44px;height:44px;border-radius:14px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+        .mini-btn-change{background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#000;}
+        .mini-btn-copy{background:linear-gradient(135deg,#4361EE,#4CC9F0);color:#fff;}
+
+        .gmail-input-container{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+        .gmail-prefix{flex:1;}
+        .gmail-domain{color:#aaa;white-space:nowrap;}
+
+        .password-container{display:flex;align-items:center;gap:10px;}
+        .password-toggle{
+            width:48px;height:48px;background:#1E3A5F;border:1px solid #4361EE;
+            border-radius:16px;color:#4CC9F0;display:flex;align-items:center;justify-content:center;cursor:pointer;
+        }
+        .btn{
+            padding:14px 20px;border:none;border-radius:40px;font-weight:600;cursor:pointer;
+            transition:0.2s;text-align:center;display:inline-flex;gap:8px;align-items:center;justify-content:center;
+        }
+        .btn-primary{background:linear-gradient(90deg,#4361EE,#4CC9F0);color:#fff;flex:1;}
+        .btn-secondary{background:#1E3A5F;color:#4CC9F0;border:1px solid #4361EE;flex:1;}
+        .btn-success{background:#10B981;color:#fff;}
+        .action-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0;}
+
+        .generated-result{
+            background:#16213E;border-radius:24px;padding:25px;margin-top:25px;
+            border:2px solid #10B981;display:none;animation:fadeIn 0.3s;
+        }
+        @keyframes fadeIn{0%{opacity:0;transform:translateY(8px);}100%{opacity:1;transform:translateY(0);}}
+
+        .modal-overlay{
+            position:fixed;inset:0;background:#000000e0;backdrop-filter:blur(4px);
+            display:flex;align-items:center;justify-content:center;z-index:2000;
+            opacity:0;visibility:hidden;transition:0.2s;padding:16px;
+        }
+        .modal-overlay.active{opacity:1;visibility:visible;}
+        .modal-content{
+            background:#16213E;border-radius:32px;padding:25px;width:100%;max-width:400px;
+            border:2px solid #4361EE;transform:translateY(-10px);transition:0.3s;
+        }
+        .modal-overlay.active .modal-content{transform:translateY(0);}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+        .modal-title{font-size:22px;color:#4CC9F0;font-weight:600;}
+        .modal-close{background:none;border:none;color:#aaa;font-size:28px;cursor:pointer;}
+
+        .data-option-buttons{display:flex;gap:12px;margin-bottom:20px;}
+        .data-option-btn{
+            padding:12px;border-radius:30px;background:#1E3A5F;border:1px solid #4361EE;
+            color:#4CC9F0;font-weight:600;flex:1;text-align:center;cursor:pointer;
+        }
+        .data-option-btn.active{background:linear-gradient(90deg,#4361EE,#4CC9F0);color:white;}
+        .fixed-data-form{display:none;margin-top:20px;}
+        .fixed-data-form.active{display:block;}
+
+        .notification-toast{
+            position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#4361EE;
+            color:white;padding:12px 25px;border-radius:50px;z-index:3000;font-weight:500;
+            box-shadow:0 4px 15px #00000080;animation:slideDown 0.2s;
+        }
+        @keyframes slideDown{0%{top:20px;opacity:0;}100%{top:80px;opacity:1;}}
+
+        /* utility */
+        .current-worker{background:#16213E;border-radius:40px;padding:12px 18px;margin:20px 0;display:none;}
+        .current-worker.active{display:block;}
+        .generate-initial{text-align:center;padding:40px 16px;}
+        #data-options-display{display:none;}
+    </style>
+</head>
+<body>
+    <!-- top navbar with wallet + notification -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <div class="nav-icon" id="back-btn"><i class="fas fa-arrow-left"></i></div>
+            <div class="app-title">Gmail Gen</div>
+        </div>
+        <div class="nav-right">
+            <div class="nav-icon"><i class="far fa-bell"></i></div>
+            <div class="wallet-badge"><i class="fas fa-wallet"></i> ১,২৫০</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- generate page -->
+        <section id="generate-page">
+            <h2 class="page-title" style="font-size:26px;margin-bottom:12px;">📧 জিমেইল জেনারেট</h2>
+
+            <!-- initial locked state -->
+            <div id="generate-initial" class="generate-initial">
+                <div class="generate-initial-icon" style="font-size:70px;color:#1E3A5F;"><i class="fas fa-envelope"></i></div>
+                <h3 style="color:#4CC9F0;">Gmail Generate আনলক করুন</h3>
+                <p style="color:#8A8A8A;margin:16px 0;">P2P মার্কেট থেকে অর্ডার সাবমিট করে ফিচার আনলক করুন</p>
+                <button class="btn btn-primary" onclick="unlockGenerate()"><i class="fas fa-unlock-alt"></i> আনলক করুন</button>
+            </div>
+
+            <!-- current worker (hidden till unlocked) -->
+            <div id="current-worker" class="current-worker"><span id="worker-name"></span></div>
+
+            <!-- main generate form (hidden by default) -->
+            <div id="generate-form" style="display:none;">
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> প্রতিটি ফিল্ডের পাশে অটো চেঞ্জ ও কপি বাটন আছে</div>
+
+                <!-- quick actions -->
+                <div class="sell-style-buttons">
+                    <div class="sell-style-btn active" onclick="autoFillAll()"><i class="fas fa-random"></i> অটো ফিল</div>
+                    <div class="sell-style-btn" onclick="suggestPassword()"><i class="fas fa-key"></i> পাসওয়ার্ড</div>
+                    <div class="sell-style-btn" onclick="validateAll()"><i class="fas fa-check-circle"></i> চেক</div>
+                    <div class="sell-style-btn" onclick="clearAll()"><i class="fas fa-trash"></i> ক্লিয়ার</div>
+                </div>
+
+                <!-- data options card -->
+                <div class="card" id="data-options-display">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <h4 style="color:#4CC9F0;">📋 ডাটা অপশন</h4>
+                        <button class="mini-btn mini-btn-copy" style="width:auto;padding:0 18px;" onclick="openDataOptionModal()"><i class="fas fa-edit"></i> পরিবর্তন</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div><span class="submit-history-label">নাম:</span> <span id="display-name-option">অটো</span></div>
+                        <div><span class="submit-history-label">ইমেইল:</span> <span id="display-email-option">অটো</span></div>
+                        <div><span class="submit-history-label">পাস:</span> <span id="display-password-option">অটো</span></div>
+                        <div><span class="submit-history-label">রিকভারি:</span> <span id="display-recovery-option">অটো</span></div>
+                    </div>
+                </div>
+
+                <!-- full name -->
+                <div class="form-group">
+                    <label class="form-label">সম্পূর্ণ নাম <span class="required-star">*</span></label>
+                    <div class="input-with-buttons">
+                        <input type="text" class="form-control" id="full-name" placeholder="যেমন: রফিকুল ইসলাম">
+                        <div class="mini-buttons-container">
+                            <button class="mini-btn mini-btn-change" onclick="autoChangeName()"><i class="fas fa-sync-alt"></i></button>
+                            <button class="mini-btn mini-btn-copy" onclick="copyName()"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- gmail -->
+                <div class="form-group">
+                    <label class="form-label">জিমেইল <span class="required-star">*</span></label>
+                    <div class="gmail-input-container">
+                        <div style="flex:1; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                            <input type="text" class="form-control gmail-prefix" id="gmail-prefix" placeholder="username" style="flex:2;">
+                            <div class="mini-buttons-container">
+                                <button class="mini-btn mini-btn-change" onclick="autoChangeGmail()"><i class="fas fa-sync-alt"></i></button>
+                                <button class="mini-btn mini-btn-copy" onclick="copyGmail()"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <span class="gmail-domain">@gmail.com</span>
+                    </div>
+                </div>
+
+                <!-- password + toggle -->
+                <div class="form-group">
+                    <label class="form-label">পাসওয়ার্ড <span class="required-star">*</span></label>
+                    <div class="password-container">
+                        <div style="flex:1; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                            <input type="password" class="form-control password-field" id="password" placeholder="শক্তিশালী পাস">
+                            <div class="mini-buttons-container">
+                                <button class="mini-btn mini-btn-change" onclick="autoChangePassword()"><i class="fas fa-sync-alt"></i></button>
+                                <button class="mini-btn mini-btn-copy" onclick="copyPassword()"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <button class="password-toggle" onclick="togglePassword()"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+
+                <!-- recovery gmail -->
+                <div class="form-group">
+                    <label class="form-label">রিকভারি জিমেইল (ঐচ্ছিক)</label>
+                    <div class="gmail-input-container">
+                        <div style="flex:1;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                            <input type="text" class="form-control gmail-prefix" id="recovery-gmail" placeholder="recovery">
+                            <div class="mini-buttons-container">
+                                <button class="mini-btn mini-btn-change" onclick="autoChangeRecoveryGmail()"><i class="fas fa-sync-alt"></i></button>
+                                <button class="mini-btn mini-btn-copy" onclick="copyRecoveryGmail()"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <span class="gmail-domain">@gmail.com</span>
+                    </div>
+                </div>
+
+                <!-- dob -->
+                <div class="form-group">
+                    <label class="form-label">জন্ম তারিখ <span class="required-star">*</span></label>
+                    <div class="input-with-buttons">
+                        <input type="date" class="form-control" id="dob">
+                        <div class="mini-buttons-container">
+                            <button class="mini-btn mini-btn-change" onclick="autoChangeDOB()"><i class="fas fa-sync-alt"></i></button>
+                            <button class="mini-btn mini-btn-copy" onclick="copyDOB()"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger"><i class="fas fa-shield-alt"></i> তথ্য নিরাপদে সংরক্ষণ করুন</div>
+
+                <!-- action row -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generateAccount()"><i class="fas fa-bolt"></i> জেনারেট</button>
+                    <button class="btn btn-secondary" onclick="copyAllData()"><i class="fas fa-copy"></i> সব কপি</button>
+                    <button class="btn btn-success" id="submit-btn" onclick="submitGmail()"><i class="fas fa-paper-plane"></i> সাবমিট</button>
+                </div>
+
+                <!-- generated result card -->
+                <div id="generated-result" class="generated-result">
+                    <div class="success-message" style="text-align:center;">
+                        <div style="font-size:48px;color:#10B981;"><i class="fas fa-check-circle"></i></div>
+                        <h3 style="color:#10B981;">জেনারেট সফল!</h3>
+                        <div style="background:#1E3A5F;border-radius:18px;padding:18px;margin-top:15px;text-align:left;">
+                            <p><strong>নাম:</strong> <span id="result-name"></span></p>
+                            <p><strong>ইমেইল:</strong> <span id="result-email"></span></p>
+                            <p><strong>পাস:</strong> <span id="result-password"></span></p>
+                            <p><strong>রিকভারি:</strong> <span id="result-recovery"></span></p>
+                            <p><strong>জন্ম:</strong> <span id="result-dob"></span></p>
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:20px;">
+                            <button class="btn btn-success" onclick="downloadCredentials()"><i class="fas fa-download"></i> ডাউনলোড</button>
+                            <button class="btn btn-primary" onclick="submitGmail()"><i class="fas fa-paper-plane"></i> সাবমিট</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- floating bottom navigation 6 items -->
+    <nav class="bottom-nav-floating">
+        <div class="nav-item-floating" onclick="goToPage('p2p')"><div class="nav-icon"><i class="fas fa-exchange-alt"></i></div><div class="nav-label">P2P</div></div>
+        <div class="nav-item-floating" onclick="goToPage('order')"><div class="nav-icon"><i class="fas fa-plus-circle"></i></div><div class="nav-label">অর্ডার</div></div>
+        <div class="nav-item-floating" onclick="goToPage('buy')"><div class="nav-icon"><i class="fas fa-shopping-bag"></i></div><div class="nav-label">কিনুন</div></div>
+        <div class="nav-item-floating" onclick="goToPage('sell')"><div class="nav-icon"><i class="fas fa-shopping-cart"></i></div><div class="nav-label">বিক্রয়</div></div>
+        <div class="nav-item-floating active" onclick="goToPage('generate')"><div class="nav-icon"><i class="fas fa-bolt"></i></div><div class="nav-label">জেনারেট</div></div>
+        <div class="nav-item-floating" onclick="goToPage('profile')"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">প্রোফাইল</div></div>
+    </nav>
+
+    <!-- modal for data option (fixed/auto) -->
+    <div class="modal-overlay" id="data-option-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 class="modal-title">ডাটা জেনারেট অপশন</h3><button class="modal-close" onclick="closeDataOptionModal()">&times;</button></div>
+            <div class="data-option-buttons">
+                <button class="data-option-btn active" id="auto-generate-btn" onclick="selectDataOption('auto')"><i class="fas fa-robot"></i> অটো</button>
+                <button class="data-option-btn" id="fixed-data-btn" onclick="selectDataOption('fixed')"><i class="fas fa-edit"></i> ফিক্সড</button>
+            </div>
+            <!-- fixed data form -->
+            <div class="fixed-data-form" id="fixed-data-form">
+                <h4 style="color:#4CC9F0;">ফিক্সড ডাটা দিন</h4>
+                <input type="text" class="form-control" id="fixed-name-input" placeholder="নাম" style="margin:10px 0;">
+                <div style="display:flex; gap:6px; margin:10px 0;"><input type="text" class="form-control" id="fixed-email-input" placeholder="username"><span style="align-self:center;">@gmail.com</span></div>
+                <input type="password" class="form-control" id="fixed-password-input" placeholder="পাসওয়ার্ড" style="margin:10px 0;">
+                <div style="display:flex; gap:6px;"><input type="text" class="form-control" id="fixed-recovery-input" placeholder="recovery (ঐচ্ছিক)"><span style="align-self:center;">@gmail.com</span></div>
+                <button class="btn btn-primary" style="width:100%;margin-top:20px;" onclick="saveFixedData()"><i class="fas fa-save"></i> সেভ করুন</button>
+            </div>
+            <!-- auto info -->
+            <div id="auto-generate-info" style="text-align:center;padding:20px;">
+                <div style="font-size:48px;color:#4CC9F0;"><i class="fas fa-robot"></i></div>
+                <h4 style="color:#4CC9F0;">অটো জেনারেট</h4>
+                <p style="color:#aaa;">বট স্বয়ংক্রিয়ভাবে ডাটা জেনারেট করবে</p>
+                <button class="btn btn-success" style="margin-top:20px;" onclick="saveAutoGenerate()"><i class="fas fa-check"></i> কনফার্ম</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // === APP STATE (cleaned, all old features + bug fixes) ===
+            let appState = {
+                generateUnlocked: false,
+                currentWorker: null,
+                dataOption: 'auto',
+                fixedData: { name: '', email: '', password: '', recovery: '' },
+                submitHistory: []
+            };
+
+            // DOM ready
+            document.addEventListener('DOMContentLoaded', function(){
+                // default DOB (18+)
+                let d = new Date(); d.setFullYear(d.getFullYear()-18);
+                document.getElementById('dob').value = d.toISOString().split('T')[0];
+                loadAppState();
+                updateGeneratePage();
+                loadSubmitHistory();
+                // modal close on outside click
+                document.getElementById('data-option-modal').addEventListener('click',function(e){if(e.target===this) closeDataOptionModal();});
+            });
+
+            function saveAppState(){ localStorage.setItem('generateAppState', JSON.stringify(appState)); }
+            function loadAppState(){ let s = localStorage.getItem('generateAppState'); if(s) appState = JSON.parse(s); }
+            function loadSubmitHistory(){ let h = localStorage.getItem('submitHistory'); if(h) appState.submitHistory = JSON.parse(h); }
+            function saveSubmitHistory(){ localStorage.setItem('submitHistory', JSON.stringify(appState.submitHistory)); }
+
+            // === UI update ===
+            function updateGeneratePage(){
+                let init = document.getElementById('generate-initial');
+                let form = document.getElementById('generate-form');
+                let workerDiv = document.getElementById('current-worker');
+                let workerSpan = document.getElementById('worker-name');
+                let dataCard = document.getElementById('data-options-display');
+                if(appState.generateUnlocked){
+                    init.style.display = 'none'; form.style.display = 'block'; dataCard.style.display = 'block';
+                    if(appState.currentWorker){ workerDiv.classList.add('active'); workerSpan.innerText = appState.currentWorker; }
+                    document.getElementById('submit-btn').style.display = 'inline-flex';
+                    updateDataOptionDisplay();
+                    if(appState.dataOption==='fixed' && appState.fixedData.name) setTimeout(autoFillAll,300);
+                } else {
+                    init.style.display = 'block'; form.style.display = 'none'; workerDiv.classList.remove('active'); dataCard.style.display = 'none';
+                }
+            }
+            function updateDataOptionDisplay(){
+                document.getElementById('display-name-option').innerText = (appState.dataOption==='fixed' && appState.fixedData.name)?'ফিক্সড':'অটো';
+                document.getElementById('display-email-option').innerText = (appState.dataOption==='fixed' && appState.fixedData.email)?'ফিক্সড':'অটো';
+                document.getElementById('display-password-option').innerText = (appState.dataOption==='fixed' && appState.fixedData.password)?'ফিক্সড':'অটো';
+                let recTxt = 'অটো';
+                if(appState.dataOption==='fixed' && appState.fixedData.recovery) recTxt='ফিক্সড';
+                else if(appState.dataOption==='fixed' && !appState.fixedData.recovery) recTxt='নেই';
+                document.getElementById('display-recovery-option').innerText = recTxt;
+            }
+            window.unlockGenerate = function(){ appState.generateUnlocked = true; appState.currentWorker = "ডেমো ওয়ার্কার"; saveAppState(); updateGeneratePage(); showNotification('জেনারেট আনলক!','success'); };
+
+            // === modal functions ===
+            window.openDataOptionModal = function(){ document.getElementById('data-option-modal').classList.add('active'); selectDataOption(appState.dataOption); };
+            window.closeDataOptionModal = function(){ document.getElementById('data-option-modal').classList.remove('active'); };
+            window.selectDataOption = function(opt){
+                appState.dataOption = opt;
+                let autoBtn = document.getElementById('auto-generate-btn'), fixedBtn = document.getElementById('fixed-data-btn');
+                let fixedForm = document.getElementById('fixed-data-form'), autoInfo = document.getElementById('auto-generate-info');
+                if(opt==='auto'){
+                    autoBtn.classList.add('active'); fixedBtn.classList.remove('active');
+                    fixedForm.style.display = 'none'; autoInfo.style.display = 'block';
+                } else {
+                    autoBtn.classList.remove('active'); fixedBtn.classList.add('active');
+                    fixedForm.style.display = 'block'; autoInfo.style.display = 'none';
+                    document.getElementById('fixed-name-input').value = appState.fixedData.name||'';
+                    document.getElementById('fixed-email-input').value = appState.fixedData.email.replace('@gmail.com','')||'';
+                    document.getElementById('fixed-password-input').value = appState.fixedData.password||'';
+                    document.getElementById('fixed-recovery-input').value = appState.fixedData.recovery?appState.fixedData.recovery.replace('@gmail.com',''):'';
+                }
+            };
+            window.saveFixedData = function(){
+                let name = document.getElementById('fixed-name-input').value.trim();
+                let email = document.getElementById('fixed-email-input').value.trim();
+                let pass = document.getElementById('fixed-password-input').value.trim();
+                if(!name||!email||!pass) return showNotification('নাম, ইমেইল ও পাসওয়ার্ড দিন','error');
+                appState.fixedData = {
+                    name: name,
+                    email: email+'@gmail.com',
+                    password: pass,
+                    recovery: document.getElementById('fixed-recovery-input').value.trim()+'@gmail.com'
+                };
+                saveAppState(); updateDataOptionDisplay(); closeDataOptionModal(); showNotification('ফিক্সড ডাটা সেভ!','success');
+            };
+            window.saveAutoGenerate = function(){ appState.dataOption='auto'; saveAppState(); updateDataOptionDisplay(); closeDataOptionModal(); showNotification('অটো মোড সেট','success'); };
+
+            // === auto change & copy (with fixed data support) ===
+            window.autoChangeName = function(){
+                if(appState.dataOption==='fixed' && appState.fixedData.name){ document.getElementById('full-name').value = appState.fixedData.name; showNotification('ফিক্সড নাম সেট','success'); }
+                else { let names = ["রফিকুল ইসলাম","সুমাইয়া আক্তার","আব্দুল করিম","নাজমুল হোসেন","ফারহানা আক্তার"]; let n = names[Math.floor(Math.random()*names.length)]; document.getElementById('full-name').value = n; showNotification('নাম: '+n,'success'); }
+            };
+            window.autoChangeGmail = function(){
+                if(appState.dataOption==='fixed' && appState.fixedData.email){ document.getElementById('gmail-prefix').value = appState.fixedData.email.replace('@gmail.com',''); showNotification('ফিক্সড ইমেইল','success');}
+                else { let adj = ['cool','smart','happy','fast']; let noun = ['tiger','eagle','lion']; let u = adj[Math.floor(Math.random()*adj.length)]+noun[Math.floor(Math.random()*noun.length)]+Math.floor(Math.random()*1000); document.getElementById('gmail-prefix').value = u; showNotification('ইমেইল: '+u,'success');}
+            };
+            window.autoChangePassword = function(){
+                if(appState.dataOption==='fixed' && appState.fixedData.password){ document.getElementById('password').value = appState.fixedData.password; showNotification('ফিক্সড পাস','success');}
+                else { let p = generateStrongPassword(); document.getElementById('password').value = p; showNotification('পাস জেনারেট','success');}
+            };
+            window.autoChangeRecoveryGmail = function(){
+                if(appState.dataOption==='fixed' && appState.fixedData.recovery){ document.getElementById('recovery-gmail').value = appState.fixedData.recovery.replace('@gmail.com',''); showNotification('ফিক্সড রিকভারি','success');}
+                else { let r = 'rec'+Math.floor(Math.random()*10000); document.getElementById('recovery-gmail').value = r; showNotification('রিকভারি: '+r,'success');}
+            };
+            window.autoChangeDOB = function(){
+                let start = new Date(1970,0,1); let end = new Date(2005,0,1); let rand = new Date(start.getTime()+Math.random()*(end.getTime()-start.getTime())); document.getElementById('dob').value = rand.toISOString().split('T')[0]; showNotification('ডিওবি আপডেট','success');
+            };
+            function generateStrongPassword(){ let c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'; return Array(12).fill().map(()=>c[Math.floor(Math.random()*c.length)]).join(''); }
+
+            // copy fns
+            window.copyName = function(){ let v = document.getElementById('full-name').value; if(v){ navigator.clipboard.writeText(v); showNotification('নাম কপি','success');} else showNotification('নাম খালি','error'); };
+            window.copyGmail = function(){ let u = document.getElementById('gmail-prefix').value; if(u){ navigator.clipboard.writeText(u+'@gmail.com'); showNotification('ইমেইল কপি','success');} else showNotification('লিখুন প্রথমে','error'); };
+            window.copyPassword = function(){ let p = document.getElementById('password').value; if(p){ navigator.clipboard.writeText(p); showNotification('পাস কপি','success');} else showNotification('পাস খালি','error'); };
+            window.copyRecoveryGmail = function(){ let r = document.getElementById('recovery-gmail').value; if(r){ navigator.clipboard.writeText(r+'@gmail.com'); showNotification('রিকভারি কপি','success');} else showNotification('রিকভারি নেই','error'); };
+            window.copyDOB = function(){ let d = document.getElementById('dob').value; if(d){ let date = new Date(d); navigator.clipboard.writeText(date.toLocaleDateString('bn-BD')); showNotification('জন্ম তারিখ কপি','success');}};
+
+            window.togglePassword = function(){
+                let f = document.getElementById('password'); let i = document.querySelector('.password-toggle i');
+                if(f.type==='password'){ f.type='text'; i.className='fas fa-eye-slash'; } else { f.type='password'; i.className='fas fa-eye'; }
+            };
+
+            window.autoFillAll = function(){ autoChangeName(); setTimeout(autoChangeGmail,100); setTimeout(autoChangePassword,200); setTimeout(autoChangeRecoveryGmail,300); setTimeout(autoChangeDOB,400); setTimeout(()=>showNotification('অটো ফিল সম্পন্ন','success'),500); };
+            window.suggestPassword = autoChangePassword;
+            window.validateAll = function(){
+                let name=document.getElementById('full-name').value, gmail=document.getElementById('gmail-prefix').value, pass=document.getElementById('password').value, dob=document.getElementById('dob').value;
+                if(!name||!gmail||!pass||!dob){ showNotification('সব * ফিল্ড পূরণ করুন','error'); return false; }
+                if(name.length<2){ showNotification('নাম কমপক্ষে ২ অক্ষর','error'); return false; }
+                if(gmail.length<3){ showNotification('ইউজারনেম কমপক্ষে ৩ অক্ষর','error'); return false; }
+                if(pass.length<6){ showNotification('পাসওয়ার্ড দুর্বল','error'); return false; }
+                let age = new Date().getFullYear() - new Date(dob).getFullYear(); if(age<13){ showNotification('বয়স কমপক্ষে ১৩ বছর','error'); return false; }
+                showNotification('ভ্যালিডেশন পাস','success'); return true;
+            };
+            window.clearAll = function(){
+                if(confirm('সব ক্লিয়ার?')){
+                    document.getElementById('full-name').value=''; document.getElementById('gmail-prefix').value=''; document.getElementById('password').value='';
+                    document.getElementById('recovery-gmail').value=''; let d=new Date(); d.setFullYear(d.getFullYear()-18); document.getElementById('dob').value=d.toISOString().split('T')[0];
+                    document.getElementById('generated-result').style.display='none'; showNotification('ক্লিয়ার','success');
+                }
+            };
+            window.copyAllData = function(){
+                let name=document.getElementById('full-name').value, user=document.getElementById('gmail-prefix').value, pass=document.getElementById('password').value, rec=document.getElementById('recovery-gmail').value, dob=document.getElementById('dob').value;
+                if(name&&user&&pass&&dob){
+                    let txt = `নাম: ${name}\nইমেইল: ${user}@gmail.com\nপাস: ${pass}\nজন্ম: ${new Date(dob).toLocaleDateString('bn-BD')}`;
+                    if(rec) txt += `\nরিকভারি: ${rec}@gmail.com`;
+                    navigator.clipboard.writeText(txt); showNotification('সব ডাটা কপি','success');
+                } else showNotification('ফর্ম অসম্পূর্ণ','error');
+            };
+            window.generateAccount = function(){
+                if(!validateAll()) return;
+                showNotification('জেনারেট হচ্ছে...','info');
+                setTimeout(()=>{
+                    document.getElementById('result-name').innerText = document.getElementById('full-name').value;
+                    document.getElementById('result-email').innerText = document.getElementById('gmail-prefix').value+'@gmail.com';
+                    document.getElementById('result-password').innerText = document.getElementById('password').value;
+                    let rec = document.getElementById('recovery-gmail').value; document.getElementById('result-recovery').innerText = rec?rec+'@gmail.com':'নেই';
+                    let dob = new Date(document.getElementById('dob').value); document.getElementById('result-dob').innerText = dob.toLocaleDateString('bn-BD');
+                    document.getElementById('generated-result').style.display = 'block';
+                    document.getElementById('generated-result').scrollIntoView({behavior:'smooth'});
+                    showNotification('জেনারেট সম্পন্ন!','success');
+                },1000);
+            };
+            window.submitGmail = function(){
+                if(!validateAll()) return;
+                let name=document.getElementById('full-name').value, user=document.getElementById('gmail-prefix').value, pass=document.getElementById('password').value, rec=document.getElementById('recovery-gmail').value, dob=document.getElementById('dob').value;
+                let submitEntry = { id:Date.now(), name, email:user+'@gmail.com', password:pass, recovery:rec?rec+'@gmail.com':null, dob:new Date(dob).toLocaleDateString('bn-BD'), status:'pending', date:new Date().toLocaleDateString('bn-BD') };
+                appState.submitHistory.push(submitEntry); saveSubmitHistory(); showNotification('সাবমিট করা হয়েছে!','success'); clearAll(); document.getElementById('generated-result').style.display='none';
+            };
+            window.downloadCredentials = function(){
+                let name=document.getElementById('full-name').value, user=document.getElementById('gmail-prefix').value, pass=document.getElementById('password').value, rec=document.getElementById('recovery-gmail').value, dob=document.getElementById('dob').value;
+                if(!name||!user||!pass||!dob) return showNotification('জেনারেট করুন প্রথমে','error');
+                let content = `Gmail credentials\nনাম: ${name}\nইমেইল: ${user}@gmail.com\nপাস: ${pass}\nজন্ম: ${new Date(dob).toLocaleDateString('bn-BD')}`;
+                if(rec) content+=`\nরিকভারি: ${rec}@gmail.com`;
+                let blob = new Blob([content],{type:'text/plain'}); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `gmail_${user}.txt`; a.click(); URL.revokeObjectURL(a.href); showNotification('ডাউনলোড শুরু','success');
+            };
+            window.goToPage = function(page){ showNotification(`${page} পেজ`,'info'); document.querySelectorAll('.nav-item-floating').forEach(i=>i.classList.remove('active')); event.currentTarget.classList.add('active'); };
+
+            function showNotification(msg, type='info'){ 
+                let notif = document.createElement('div'); notif.className = 'notification-toast';
+                let bg = type==='success'?'#10B981':type==='error'?'#EF4444':'#4361EE';
+                notif.style.background = bg; notif.innerText = msg; document.body.appendChild(notif);
+                setTimeout(()=>notif.remove(), 2800);
+            }
+
+            // back, home (wallet already there)
+            document.getElementById('back-btn').addEventListener('click',()=> showNotification('পিছনে','info'));
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Create&Earn · নোটিফিকেশন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background-color: #0D1B2A;
+            color: #fff;
+            line-height: 1.5;
+            max-width: 450px;
+            margin: 0 auto;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            position: relative;
+            padding-bottom: 85px; /* space for floating bottom nav */
+        }
+
+        /* ===== TOP NAV ===== */
+        .top-navbar {
+            background: linear-gradient(90deg, #0f1a2b, #16213E);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1E3A5F;
+        }
+        .back-btn {
+            font-size: 20px;
+            color: #4CC9F0;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: rgba(67,97,238,0.1); }
+        .app-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #4CC9F0, #4361EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.3px;
+        }
+        .top-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .top-actions i {
+            font-size: 20px;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .top-actions i:hover { color: #4CC9F0; }
+        .wallet-badge {
+            position: relative;
+        }
+        .wallet-badge::after {
+            content: "৳250";
+            position: absolute;
+            bottom: -14px;
+            right: -8px;
+            background: #10B981;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .notification-badge {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #FF4757, #FF6B81);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 8px #FF4757;
+            margin-left: 2px;
+        }
+
+        /* ===== CONTROL BAR ===== */
+        .control-bar {
+            background: rgba(22,33,62,0.95);
+            padding: 12px 15px;
+            border-bottom: 1px solid #1E3A5F;
+            position: sticky;
+            top: 74px;
+            z-index: 90;
+        }
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            background: rgba(30,58,95,0.6);
+            border: 1px solid #4361EE;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CC9F0;
+        }
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 3px;
+            scrollbar-width: thin;
+        }
+        .filter-controls::-webkit-scrollbar {
+            height: 4px;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            background: rgba(30,58,95,0.7);
+            border: 1px solid rgba(67,97,238,0.3);
+            border-radius: 30px;
+            color: #ccc;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: #4361EE;
+            color: white;
+            border-color: #4CC9F0;
+        }
+
+        /* ===== BATCH CONTROLS ===== */
+        .batch-controls {
+            background: #1a2b41;
+            padding: 10px 15px;
+            border-bottom: 1px solid #1E3A5F;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 154px;
+            z-index: 85;
+        }
+        .batch-controls.active { display: flex; }
+        .selected-count { color: #4CC9F0; font-size: 14px; }
+        .batch-actions { display: flex; gap: 10px; }
+        .batch-action-btn {
+            padding: 5px 12px;
+            background: rgba(67,97,238,0.2);
+            border: 1px solid #4361EE;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .batch-action-btn:hover { background: #4361EE; }
+
+        /* ===== CATEGORY TABS ===== */
+        .notification-categories {
+            display: flex;
+            background: #16213E;
+            border-bottom: 1px solid #1E3A5F;
+            position: sticky;
+            top: 122px;
+            z-index: 80;
+        }
+        .category-tab {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+            position: relative;
+        }
+        .category-tab.active { border-bottom-color: #4CC9F0; color: #4CC9F0; }
+        .category-badge {
+            position: absolute;
+            top: 4px;
+            right: 20%;
+            background: #FF4757;
+            color: white;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container { padding: 15px 15px 25px; }
+
+        /* ===== NOTIFICATION ITEMS ===== */
+        .notification-item {
+            background-color: #16213E;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(67,97,238,0.3);
+            transition: 0.2s;
+        }
+        .notification-item.unread { background: rgba(67,97,238,0.15); border-left: 4px solid #4CC9F0; }
+        .notification-item-header {
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .notification-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: #4361EE;
+            cursor: pointer;
+        }
+        .notification-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(145deg, #4361EE, #4CC9F0);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .notification-content {
+            flex: 1;
+            cursor: pointer;
+        }
+        .notification-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .notification-content p { font-size: 14px; color: #bbb; margin: 4px 0 6px; }
+        .notification-time { font-size: 12px; color: #8A8A8A; }
+
+        .notification-item-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .notification-status-badge {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-verified { background: rgba(16,185,129,0.2); color: #10B981; }
+        .status-unverified { background: rgba(245,158,11,0.2); color: #F59E0B; }
+        .status-pending { background: rgba(245,158,11,0.2); color: #F59E0B; }
+
+        .notification-actions { display: flex; gap: 5px; }
+        .notification-action-btn {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: rgba(30,58,95,0.6);
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .notification-action-btn:hover { background: #4361EE; color: white; }
+
+        /* gmail details */
+        .notification-details {
+            padding: 0 15px 15px;
+            border-top: 1px solid rgba(67,97,238,0.2);
+            margin-top: 5px;
+            display: none;
+        }
+        .notification-item.expanded .notification-details { display: block; }
+        .notification-gmail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .notification-gmail-item { font-size: 14px; }
+        .notification-gmail-label { color: #aaa; font-size: 12px; margin-bottom: 2px; }
+        .notification-gmail-value {
+            background: #1e2a47;
+            padding: 6px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-word;
+        }
+        .copy-field-btn, .show-password-btn {
+            background: transparent;
+            border: none;
+            color: #4CC9F0;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .notification-gmail-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .notification-action-full {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(90deg, #4361EE, #4CC9F0);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+        .notification-action-full.secondary { background: #2a3a5a; border: 1px solid #4361EE; }
+
+        /* empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+            color: #aaa;
+        }
+        .empty-state.active { display: block; }
+        .empty-state i { font-size: 60px; color: #1E3A5F; margin-bottom: 15px; }
+
+        /* export options */
+        .export-options {
+            background: #16213E;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #1E3A5F;
+            display: none;
+        }
+        .export-options.active { display: block; }
+        .export-title { text-align: center; color: #4CC9F0; margin-bottom: 15px; }
+        .export-formats {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 10px;
+        }
+        .export-format-btn {
+            background: #1e2a47;
+            border: 1px solid #4361EE;
+            border-radius: 12px;
+            padding: 12px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .export-format-btn:hover { background: #4361EE; }
+
+        /* modal */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.2s;
+            padding: 20px;
+        }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: #16213E; border-radius: 30px; padding: 25px;
+            max-width: 400px; width: 100%; border: 1px solid #4361EE;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; color: #aaa; font-size: 22px; cursor: pointer; }
+        .modal-detail-item {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid #1E3A5F;
+        }
+        .modal-detail-label { color: #aaa; }
+        .modal-detail-value { color: white; max-width: 60%; text-align: right; }
+
+        /* action buttons */
+        .btn {
+            display: block; width: 100%; padding: 14px; border: none;
+            border-radius: 40px; font-weight: 600; cursor: pointer;
+            margin-top: 15px; transition: 0.2s;
+        }
+        .btn-success { background: linear-gradient(90deg, #10B981, #34D399); color: white; }
+        .btn-danger { background: linear-gradient(90deg, #EF4444, #F87171); color: white; }
+
+        /* floating bottom navigation - 6 items */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 30px);
+            max-width: 420px;
+            background: rgba(15, 25, 40, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: 1px solid #1E3A5F;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 200;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8a9bb5;
+            font-size: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 4px 0;
+            flex: 1;
+        }
+        .nav-item i { font-size: 20px; margin-bottom: 2px; }
+        .nav-item.active { color: #4CC9F0; }
+        .nav-item span { font-size: 11px; font-weight: 500; }
+
+        /* toast */
+        .notification-toast {
+            position: fixed; top: 90px; left: 50%; transform: translateX(-50%);
+            background: #4361EE; color: white; padding: 12px 20px;
+            border-radius: 40px; z-index: 300; box-shadow: 0 8px 20px black;
+            max-width: 90%; text-align: center; animation: slideDown 0.2s;
+        }
+        @keyframes slideDown { from { top: 60px; opacity: 0; } to { top: 90px; opacity: 1; } }
+
+        @media (max-width: 400px) {
+            .notification-gmail-content { grid-template-columns: 1fr; }
+            .export-formats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAVIGATION with wallet & noti icon -->
+    <header class="top-navbar">
+        <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+        <div class="app-title">নোটিফিকেশন</div>
+        <div class="top-actions">
+            <div class="wallet-badge"><i class="fas fa-wallet"></i></div>
+            <i class="fas fa-bell" onclick="openNotificationModal(0)" style="opacity:0.6; pointer-events:none;"></i>
+            <span class="notification-badge" style="position:relative; left:-12px; top:-6px;">8</span>
+        </div>
+    </header>
+
+    <!-- Control Bar -->
+    <div class="control-bar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="খুঁজুন...">
+        </div>
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">সব</button>
+            <button class="filter-btn" data-filter="today">আজ</button>
+            <button class="filter-btn" data-filter="unread">অপঠিত</button>
+            <button class="filter-btn" data-filter="gmail">Gmail</button>
+            <button class="filter-btn" data-filter="payment">পেমেন্ট</button>
+        </div>
+    </div>
+
+    <!-- Batch Controls -->
+    <div class="batch-controls" id="batchControls">
+        <span class="selected-count" id="selectedCount">0 নির্বাচিত</span>
+        <div class="batch-actions">
+            <button class="batch-action-btn" onclick="markSelectedAsRead()"><i class="fas fa-check"></i> পড়েছেন</button>
+            <button class="batch-action-btn" onclick="deleteSelected()"><i class="fas fa-trash"></i> মুছুন</button>
+            <button class="batch-action-btn" onclick="clearSelection()"><i class="fas fa-times"></i> বাতিল</button>
+        </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="notification-categories">
+        <div class="category-tab active" data-category="all">সব <span class="category-badge">8</span></div>
+        <div class="category-tab" data-category="gmail">Gmail <span class="category-badge">5</span></div>
+        <div class="category-tab" data-category="payment">পেমেন্ট <span class="category-badge">2</span></div>
+        <div class="category-tab" data-category="update">আপডেট <span class="category-badge">1</span></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Export Options (hidden by default) -->
+        <div class="export-options" id="exportOptions">
+            <div class="export-title">সমস্ত Gmail ডাটা এক্সপোর্ট</div>
+            <div class="export-formats">
+                <button class="export-format-btn" onclick="exportData('excel')"><i class="fas fa-file-excel"></i> Excel</button>
+                <button class="export-format-btn" onclick="exportData('csv')"><i class="fas fa-file-csv"></i> CSV</button>
+                <button class="export-format-btn" onclick="exportData('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="export-format-btn" onclick="exportData('txt')"><i class="fas fa-file-alt"></i> TXT</button>
+            </div>
+        </div>
+
+        <!-- Notifications will be injected here -->
+        <div class="notification-list" id="notificationList"></div>
+
+        <!-- Bottom action buttons -->
+        <button class="btn btn-success" onclick="toggleExportOptions()"><i class="fas fa-download"></i> এক্সপোর্ট Gmail</button>
+        <button class="btn btn-danger" onclick="clearAllNotifications()"><i class="fas fa-trash"></i> সব ক্লিয়ার</button>
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+            <i class="fas fa-bell-slash"></i>
+            <h4>কোনো নোটিফিকেশন নেই</h4>
+        </div>
+    </div>
+
+    <!-- Modal for details -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalNotificationTitle"></h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalNotificationDetails"></div>
+            <div style="display:flex; gap:8px; margin-top:20px;">
+                <button class="notification-action-full" onclick="copyModalNotificationData()"><i class="fas fa-copy"></i> কপি</button>
+                <button class="notification-action-full secondary" onclick="closeModal()">বন্ধ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Bottom Navigation (6 pages) -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="showToast('P2P')"><i class="fas fa-handshake"></i><span>P2P</span></div>
+        <div class="nav-item" onclick="showToast('অর্ডার')"><i class="fas fa-clipboard-list"></i><span>অর্ডার</span></div>
+        <div class="nav-item active" onclick="showToast('ক্রয়')"><i class="fas fa-cart-plus"></i><span>ক্রয়</span></div>
+        <div class="nav-item" onclick="showToast('বিক্রয়')"><i class="fas fa-tag"></i><span>বিক্রয়</span></div>
+        <div class="nav-item" onclick="showToast('জেনারেট')"><i class="fas fa-bolt"></i><span>জেনারেট</span></div>
+        <div class="nav-item" onclick="showToast('প্রোফাইল')"><i class="fas fa-user"></i><span>প্রোফাইল</span></div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- APP STATE ----------
+            window.appState = {
+                notifications: [
+                    { id: 1, title: "🎉 নতুন অর্ডার", message: "P2P মার্কেটে কাজ শুরু করুন", time: "৫ মিনিট আগে", category: "update", type: "info", read: false, date: new Date(), icon: "fa-bell" },
+                    { id: 2, title: "💰 পেমেন্ট রিসিভড", message: "৳500 পাঠানো হয়েছে", time: "১ ঘন্টা আগে", category: "payment", type: "payment", read: false, date: new Date(Date.now() - 3600000), icon: "fa-money-bill-wave" }
+                ],
+                notificationGmails: [
+                    { id: 101, title: "🎯 জিমেইল ক্রয়", date: "আজ ১০:৩০", gmailId: "GMAIL-7894", price: "৳১৫.০০", email: "mahfuz.sheikh4568@gmail.com", password: "Mahfuz@Secure123", recovery: "mahfuz.backup@gmail.com", purchaseDate: "২৮ ডিসেম্বর", category: "gmail", type: "gmail", verificationStatus: "verified", read: false, icon: "fa-envelope" },
+                    { id: 102, title: "✅ জিমেইল ক্রয়", date: "গতকাল", gmailId: "GMAIL-6543", price: "৳১২.৫০", email: "rafikul.islam789@gmail.com", password: "Rafikul@456", recovery: "rafikul.backup@gmail.com", purchaseDate: "২৭ ডিসেম্বর", category: "gmail", type: "gmail", verificationStatus: "pending", read: true, icon: "fa-envelope" },
+                    { id: 103, title: "💳 পেমেন্ট", message: "উইথড্র ৳1200", time: "৩ দিন আগে", category: "payment", type: "payment", read: true, date: new Date(Date.now() - 259200000), icon: "fa-credit-card" }
+                ],
+                selectedNotifications: [],
+                currentFilter: "all",
+                currentCategory: "all",
+                searchQuery: ""
+            };
+
+            // helper to merge and sort
+            function getAllMerged() {
+                let all = [
+                    ...appState.notifications.map(n => ({ ...n, isGmail: false })),
+                    ...appState.notificationGmails.map(g => ({ ...g, isGmail: true }))
+                ];
+                // category
+                if (appState.currentCategory !== 'all') {
+                    all = all.filter(n => n.category === appState.currentCategory);
+                }
+                // filter
+                if (appState.currentFilter !== 'all') {
+                    const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    if (appState.currentFilter === 'today') all = all.filter(n => n.date >= today);
+                    else if (appState.currentFilter === 'unread') all = all.filter(n => !n.read);
+                    else if (appState.currentFilter === 'gmail') all = all.filter(n => n.type === 'gmail');
+                    else if (appState.currentFilter === 'payment') all = all.filter(n => n.type === 'payment');
+                }
+                // search
+                if (appState.searchQuery) {
+                    let q = appState.searchQuery.toLowerCase();
+                    all = all.filter(n => (n.title?.toLowerCase().includes(q) || n.message?.toLowerCase().includes(q) || n.gmailId?.toLowerCase().includes(q) || n.email?.toLowerCase().includes(q)));
+                }
+                all.sort((a,b) => (b.date || 0) - (a.date || 0));
+                return all;
+            }
+
+            function renderNotifications() {
+                const list = document.getElementById('notificationList');
+                const empty = document.getElementById('emptyState');
+                const items = getAllMerged();
+                if (items.length === 0) {
+                    empty.classList.add('active');
+                    list.innerHTML = '';
+                    return;
+                } else empty.classList.remove('active');
+
+                let html = '';
+                items.forEach(n => {
+                    let selected = appState.selectedNotifications.includes(n.id) ? 'selected' : '';
+                    let readClass = n.read ? '' : 'unread';
+                    let statusBadge = n.verificationStatus ? 
+                        `<span class="notification-status-badge ${n.verificationStatus==='verified'?'status-verified':'status-unverified'}">${n.verificationStatus==='verified'?'✓ ভেরিফাইড':'⏳ পেন্ডিং'}</span>` : '';
+
+                    html += `<div class="notification-item ${readClass} ${selected}" data-id="${n.id}" data-type="${n.isGmail?'gmail':'regular'}">`;
+                    html += `<div class="notification-item-header">`;
+                    html += `<div class="notification-checkbox"><input type="checkbox" ${selected?'checked':''} onchange="toggleNotificationSelection(${n.id}, this.checked)"></div>`;
+                    html += `<div class="notification-icon"><i class="fas ${n.icon || 'fa-bell'}"></i></div>`;
+                    html += `<div class="notification-content" onclick="expandNotification(${n.id})"><h4>${n.title} ${!n.read ? '<span class="status-badge status-pending">নতুন</span>' : ''}</h4>`;
+                    html += `<p>${n.message || n.date || ''}</p><div class="notification-time">${n.time || n.date || ''}</div></div>`;
+                    html += `<div class="notification-item-header-right">${statusBadge}`;
+                    html += `<div class="notification-actions">`;
+                    html += `<button class="notification-action-btn" onclick="markAsRead(${n.id})"><i class="fas fa-check"></i></button>`;
+                    html += `<button class="notification-action-btn" onclick="deleteNotification(${n.id})"><i class="fas fa-trash"></i></button>`;
+                    html += `<button class="notification-action-btn" onclick="openNotificationModal(${n.id})"><i class="fas fa-eye"></i></button>`;
+                    html += `</div></div></div>`;
+
+                    // Gmail details if applicable
+                    if (n.isGmail) {
+                        html += `<div class="notification-details" id="details-${n.id}">`;
+                        html += `<div class="notification-gmail-content">`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">Gmail ID</div><div class="notification-gmail-value">${n.gmailId} <button class="copy-field-btn" onclick="copyToClipboard('${n.gmailId}','Gmail ID')"><i class="fas fa-copy"></i></button></div></div>`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">মূল্য</div><div class="notification-gmail-value">${n.price} <button class="copy-field-btn" onclick="copyToClipboard('${n.price}','মূল্য')"><i class="fas fa-copy"></i></button></div></div>`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">ইমেইল</div><div class="notification-gmail-value">${n.email} <button class="copy-field-btn" onclick="copyToClipboard('${n.email}','ইমেইল')"><i class="fas fa-copy"></i></button></div></div>`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">পাস</div><div class="notification-gmail-value"><span id="password-${n.id}">••••••••</span> <button class="copy-field-btn" onclick="copyToClipboard('${n.password}','পাসওয়ার্ড')"><i class="fas fa-copy"></i></button> <button class="show-password-btn" onclick="togglePassword(${n.id}, '${n.password}')"><i class="fas fa-eye"></i></button></div></div>`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">রিকভারি</div><div class="notification-gmail-value">${n.recovery} <button class="copy-field-btn" onclick="copyToClipboard('${n.recovery}','রিকভারি')"><i class="fas fa-copy"></i></button></div></div>`;
+                        html += `<div class="notification-gmail-item"><div class="notification-gmail-label">তারিখ</div><div class="notification-gmail-value">${n.purchaseDate} <button class="copy-field-btn" onclick="copyToClipboard('${n.purchaseDate}','তারিখ')"><i class="fas fa-copy"></i></button></div></div>`;
+                        html += `</div><div class="notification-gmail-actions">`;
+                        html += `<button class="notification-action-full" onclick="copyNotificationGmailData(${n.id})"><i class="fas fa-copy"></i> সব কপি</button>`;
+                        html += `<button class="notification-action-full secondary" onclick="verifyEmail(${n.id})"><i class="fas fa-check-circle"></i> ভেরিফাই</button>`;
+                        html += `</div></div>`;
+                    }
+                    html += `</div>`;
+                });
+                list.innerHTML = html;
+                updateCategoryBadges();
+                updateNotificationBadge();
+            }
+
+            // utility functions
+            window.toggleNotificationSelection = (id, checked) => {
+                if (checked) { if (!appState.selectedNotifications.includes(id)) appState.selectedNotifications.push(id); }
+                else { let idx = appState.selectedNotifications.indexOf(id); if(idx>-1) appState.selectedNotifications.splice(idx,1); }
+                updateBatchControls();
+            };
+            window.updateBatchControls = () => {
+                let ctrl = document.getElementById('batchControls');
+                let cnt = document.getElementById('selectedCount');
+                if (appState.selectedNotifications.length) {
+                    ctrl.classList.add('active');
+                    cnt.innerText = appState.selectedNotifications.length + ' নির্বাচিত';
+                } else ctrl.classList.remove('active');
+            };
+            window.markSelectedAsRead = () => {
+                appState.selectedNotifications.forEach(id => { markAsRead(id, false); });
+                appState.selectedNotifications = []; renderNotifications(); updateBatchControls(); showToast('পঠিত হিসেবে চিহ্নিত');
+            };
+            window.deleteSelected = () => {
+                if (!confirm('নির্বাচিত নোটিফিকেশন মুছবেন?')) return;
+                appState.selectedNotifications.forEach(id => deleteNotification(id, false));
+                appState.selectedNotifications = []; renderNotifications(); updateBatchControls(); showToast('মুছে ফেলা হয়েছে');
+            };
+            window.clearSelection = () => { appState.selectedNotifications = []; renderNotifications(); updateBatchControls(); };
+            window.markAsRead = (id, show=true) => {
+                let n = appState.notifications.find(x=>x.id===id); if(n) n.read=true;
+                let g = appState.notificationGmails.find(x=>x.id===id); if(g) g.read=true;
+                if(show) showToast('পঠিত হয়েছে'); updateNotificationBadge(); renderNotifications();
+            };
+            window.deleteNotification = (id, show=true) => {
+                appState.notifications = appState.notifications.filter(x=>x.id!==id);
+                appState.notificationGmails = appState.notificationGmails.filter(x=>x.id!==id);
+                let idx = appState.selectedNotifications.indexOf(id); if(idx>-1) appState.selectedNotifications.splice(idx,1);
+                if(show) showToast('মুছে ফেলা হয়েছে'); renderNotifications();
+            };
+            window.expandNotification = (id) => {
+                let el = document.querySelector(`.notification-item[data-id="${id}"]`);
+                if (el && document.getElementById(`details-${id}`)) { el.classList.toggle('expanded'); markAsRead(id); }
+                else openNotificationModal(id);
+            };
+            window.copyToClipboard = (text, label) => { navigator.clipboard.writeText(text).then(()=>showToast(`${label} কপি হয়েছে`)); };
+            window.togglePassword = (id, pass) => {
+                let span = document.getElementById(`password-${id}`);
+                if (span.innerText === '••••••••') { span.innerText = pass; } else { span.innerText = '••••••••'; }
+            };
+            window.verifyEmail = (id) => {
+                let g = appState.notificationGmails.find(x=>x.id===id);
+                if(g) { g.verificationStatus='verified'; showToast('ভেরিফাইড!'); renderNotifications(); }
+            };
+            window.copyNotificationGmailData = (id) => {
+                let g = appState.notificationGmails.find(x=>x.id===id);
+                if(g) { let data = `Gmail ID: ${g.gmailId}\nPrice: ${g.price}\nEmail: ${g.email}\nPassword: ${g.password}\nRecovery: ${g.recovery}\nDate: ${g.purchaseDate}`; copyToClipboard(data,'সমস্ত Gmail'); }
+            };
+            window.openNotificationModal = (id) => {
+                let all = getAllMerged(); let notif = all.find(x=>x.id==id); if(!notif) return;
+                let modal = document.getElementById('notificationModal');
+                document.getElementById('modalNotificationTitle').innerText = notif.title;
+                let details = '';
+                if(notif.isGmail) {
+                    details = `<div class="modal-detail-item"><span class="modal-detail-label">Gmail ID</span><span class="modal-detail-value">${notif.gmailId}</span></div>`+
+                        `<div class="modal-detail-item"><span class="modal-detail-label">মূল্য</span><span class="modal-detail-value">${notif.price}</span></div>`+
+                        `<div class="modal-detail-item"><span class="modal-detail-label">ইমেইল</span><span class="modal-detail-value">${notif.email}</span></div>`+
+                        `<div class="modal-detail-item"><span class="modal-detail-label">পাস</span><span class="modal-detail-value">${notif.password}</span></div>`;
+                } else {
+                    details = `<div class="modal-detail-item"><span class="modal-detail-label">বার্তা</span><span class="modal-detail-value">${notif.message || ''}</span></div>`+
+                        `<div class="modal-detail-item"><span class="modal-detail-label">সময়</span><span class="modal-detail-value">${notif.time || ''}</span></div>`;
+                }
+                document.getElementById('modalNotificationDetails').innerHTML = details;
+                modal.classList.add('active');
+                modal.dataset.currentId = id; modal.dataset.isGmail = notif.isGmail;
+                markAsRead(id);
+            };
+            window.closeModal = () => document.getElementById('notificationModal').classList.remove('active');
+            window.copyModalNotificationData = () => {
+                let modal = document.getElementById('notificationModal'); let id = modal.dataset.currentId; let isG = modal.dataset.isGmail==='true';
+                if(isG) copyNotificationGmailData(parseInt(id)); else { let n = appState.notifications.find(x=>x.id==id); if(n) copyToClipboard(n.title+'\n'+n.message,'নোটিফিকেশন'); }
+            };
+            window.toggleExportOptions = () => document.getElementById('exportOptions').classList.toggle('active');
+            window.exportData = (fmt) => { showToast(fmt.toUpperCase()+' এক্সপোর্ট (ডেমো)'); document.getElementById('exportOptions').classList.remove('active'); };
+            window.clearAllNotifications = () => { if(confirm('সব নোটিফিকেশন ক্লিয়ার?')) { appState.notifications = []; appState.notificationGmails = []; appState.selectedNotifications = []; renderNotifications(); } };
+            window.goBack = () => showToast('পেছনে যান (ডেমো)');
+            window.showToast = (msg) => {
+                let t = document.createElement('div'); t.className='notification-toast'; t.innerText=msg; document.body.appendChild(t);
+                setTimeout(()=>{ if(t.parentNode) t.remove(); },2000);
+            };
+            function updateNotificationBadge() {
+                let unread = [...appState.notifications.filter(n=>!n.read), ...appState.notificationGmails.filter(g=>!g.read)].length;
+                let badge = document.querySelector('.notification-badge');
+                if(badge) { badge.innerText = unread; if(unread===0) badge.style.display='none'; else badge.style.display='flex'; }
+            }
+            function updateCategoryBadges() {
+                let total = appState.notifications.length + appState.notificationGmails.length;
+                document.querySelector('.category-tab[data-category="all"] .category-badge').innerText = total;
+                document.querySelector('.category-tab[data-category="gmail"] .category-badge').innerText = appState.notificationGmails.length;
+                document.querySelector('.category-tab[data-category="payment"] .category-badge').innerText = appState.notifications.filter(n=>n.category==='payment').length + appState.notificationGmails.filter(g=>g.category==='payment').length;
+                document.querySelector('.category-tab[data-category="update"] .category-badge').innerText = appState.notifications.filter(n=>n.category==='update').length;
+            }
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', (e) => { appState.searchQuery = e.target.value; renderNotifications(); });
+            document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', function(e) {
+                document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+                this.classList.add('active'); appState.currentFilter = this.dataset.filter; renderNotifications();
+            }));
+            document.querySelectorAll('.category-tab').forEach(t => t.addEventListener('click', function() {
+                document.querySelectorAll('.category-tab').forEach(x=>x.classList.remove('active'));
+                this.classList.add('active'); appState.currentCategory = this.dataset.category; renderNotifications();
+            }));
+
+            renderNotifications();
+            setInterval(() => { if(Math.random()>0.7) showToast('নতুন নোটিফিকেশন চেক করুন'); }, 40000);
+        })();
+    </script>
+</body>
+</html>

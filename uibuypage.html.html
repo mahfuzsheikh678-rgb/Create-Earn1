@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Gmail ক্রয় - Professional P2P মার্কেট</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background: #0D1B2A;
+            color: #ffffff;
+            max-width: 450px;
+            margin: 0 auto;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 16px;
+            padding-bottom: 90px;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: linear-gradient(90deg, #0f1a2f, #16213E);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1E3A5F;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            color: #4CC9F0;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #6ec3f0;
+            transform: scale(1.1);
+        }
+
+        .app-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4CC9F0, #4361EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #EF4444;
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Wallet Card */
+        .wallet-card {
+            background: linear-gradient(135deg, #1E3A5F, #16213E);
+            border-radius: 20px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #4361EE;
+        }
+
+        .wallet-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wallet-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .wallet-balance {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #4CC9F0;
+        }
+
+        .wallet-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .wallet-action {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid #4CC9F0;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            color: #4CC9F0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .wallet-action:hover {
+            background: #4CC9F0;
+            color: #0D1B2A;
+        }
+
+        /* Premium Ribbon */
+        .premium-ribbon {
+            background: linear-gradient(90deg, #F59E0B, #FBBF24);
+            color: #111;
+            padding: 10px 16px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(30, 58, 95, 0.5);
+            border-radius: 16px;
+            padding: 12px 4px;
+            text-align: center;
+            border: 1px solid #1E3A5F;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4CC9F0;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: #aaa;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .quick-btn {
+            background: rgba(67, 97, 238, 0.15);
+            border: 1px solid #4361EE;
+            border-radius: 20px;
+            padding: 12px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quick-btn i {
+            font-size: 1.3rem;
+            color: #4CC9F0;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quick-btn span {
+            font-size: 0.7rem;
+            color: #4CC9F0;
+            font-weight: 600;
+        }
+
+        .quick-btn:hover {
+            background: rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Price Info Card */
+        .price-info {
+            background: linear-gradient(135deg, #16213E, #1E3A5F);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #4361EE;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-info-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .price-main {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4CC9F0, #4361EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .price-badge {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10B981;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            color: #10B981;
+        }
+
+        /* Fee Info */
+        .fee-info {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid #F59E0B;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fee-left i {
+            color: #F59E0B;
+            margin-right: 8px;
+        }
+
+        .fee-right {
+            font-weight: 700;
+            color: #F59E0B;
+            font-size: 1.2rem;
+        }
+
+        /* Search & Filter */
+        .search-section {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 14px;
+            color: #4CC9F0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: #16213E;
+            border: 1px solid #1E3A5F;
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #4361EE;
+        }
+
+        .filter-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .filter-toggle button {
+            background: none;
+            border: none;
+            color: #4CC9F0;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-panel {
+            background: #16213E;
+            border: 1px solid #1E3A5F;
+            border-radius: 20px;
+            padding: 16px;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .filter-panel.show {
+            display: block;
+        }
+
+        .filter-group {
+            margin-bottom: 16px;
+        }
+
+        .filter-title {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid #4361EE;
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: #4CC9F0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .chip.active {
+            background: #4361EE;
+            color: white;
+        }
+
+        .price-range {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .price-range input {
+            width: 100%;
+        }
+
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        /* Gmail Card - Redesigned with Table Layout */
+        .gmail-card {
+            background: #16213E;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1E3A5F;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .gmail-card.featured {
+            border: 2px solid #F59E0B;
+            background: linear-gradient(145deg, #16213E, #1a2744);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #F59E0B;
+            color: #111;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Seller Header */
+        .seller-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .seller-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4361EE, #4CC9F0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .seller-info {
+            flex: 1;
+        }
+
+        .seller-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .verified-badge {
+            background: #4361EE;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .premium-badge {
+            background: #F59E0B;
+            color: #111;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            font-size: 0.8rem;
+        }
+
+        .stars {
+            color: #F59E0B;
+        }
+
+        .time {
+            color: #aaa;
+        }
+
+        /* Favorite Heart */
+        .favorite-heart {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.2s;
+            z-index: 2;
+        }
+
+        .favorite-heart.active {
+            color: #EF4444;
+        }
+
+        /* Price Tag */
+        .price-tag {
+            position: absolute;
+            top: 20px;
+            right: 60px;
+            background: #0D1B2A;
+            border: 2px solid #10B981;
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #10B981;
+        }
+
+        .price-diff {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-left: 4px;
+        }
+
+        /* Gmail Details Table */
+        .details-table {
+            background: rgba(10, 25, 40, 0.6);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid #1E3A5F;
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1E3A5F;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-label {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .table-value {
+            font-weight: 600;
+            color: #fff;
+            text-align: right;
+        }
+
+        .gmail-address {
+            color: #4CC9F0;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .total-price {
+            color: #10B981;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Warranty & Verification Badges */
+        .badge-container {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .feature-badge {
+            background: rgba(67, 97, 238, 0.2);
+            border: 1px solid #4361EE;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .feature-badge i {
+            color: #4CC9F0;
+        }
+
+        /* Compare & Bulk Checkboxes */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Action Buttons - 3 Beautiful Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-buy {
+            background: linear-gradient(90deg, #10B981, #34D399);
+            color: white;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-chat {
+            background: rgba(67, 97, 238, 0.15);
+            border: 1px solid #4361EE;
+            color: #4CC9F0;
+        }
+
+        .btn-chat:hover {
+            background: rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .btn-details {
+            background: rgba(107, 114, 128, 0.15);
+            border: 1px solid #6B7280;
+            color: #D1D5DB;
+        }
+
+        .btn-details:hover {
+            background: rgba(107, 114, 128, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Bulk Buy Panel */
+        .bulk-panel {
+            background: linear-gradient(135deg, #1E3A5F, #16213E);
+            border: 2px solid #F59E0B;
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .bulk-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .bulk-total {
+            color: #F59E0B;
+            font-weight: 700;
+        }
+
+        .bulk-discount {
+            color: #10B981;
+        }
+
+        .btn-bulk {
+            width: 100%;
+            background: #F59E0B;
+            color: #111;
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .btn-bulk:disabled {
+            background: #555;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* Alert Messages */
+        .alert {
+            background: rgba(67, 97, 238, 0.15);
+            border-left: 4px solid #4361EE;
+            border-radius: 12px;
+            padding: 14px;
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .alert i {
+            font-size: 1.5rem;
+            color: #4CC9F0;
+        }
+
+        /* Bottom Navigation - 6 Items */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 450px;
+            margin: 0 auto;
+            background: #0f1a2f;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 16px;
+            border-top: 2px solid #1E3A5F;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8A8A8A;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: #4CC9F0;
+        }
+
+        .nav-item:hover {
+            color: #4CC9F0;
+            transform: translateY(-3px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #16213E;
+            border: 2px solid #4361EE;
+            border-radius: 30px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #4CC9F0;
+            font-size: 1.4rem;
+        }
+
+        .modal-close {
+            font-size: 2rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #EF4444;
+        }
+
+        /* Compare Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compare-table th {
+            background: #1E3A5F;
+            padding: 10px;
+            text-align: left;
+            color: #4CC9F0;
+        }
+
+        .compare-table td {
+            padding: 10px;
+            border-bottom: 1px solid #1E3A5F;
+        }
+
+        /* Chat Modal */
+        .chat-messages {
+            height: 250px;
+            overflow-y: auto;
+            background: #0D1B2A;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            background: #4361EE;
+            margin-left: auto;
+        }
+
+        .message.received {
+            background: #1E3A5F;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            background: #1E3A5F;
+            border: 1px solid #4361EE;
+            border-radius: 30px;
+            color: white;
+        }
+
+        .chat-input button {
+            background: #10B981;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-success {
+            color: #10B981;
+        }
+
+        .text-warning {
+            color: #F59E0B;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation with Wallet & Notification -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <i class="fas fa-bars nav-icon"></i>
+            <span class="app-title">Gmail P2P</span>
+        </div>
+        <div class="nav-right">
+            <div class="nav-icon" onclick="openWallet()">
+                <i class="fas fa-wallet"></i>
+                <span class="badge">1250</span>
+            </div>
+            <div class="nav-icon" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Wallet Card -->
+        <div class="wallet-card">
+            <div class="wallet-info">
+                <span class="wallet-label">ওয়ালেট ব্যালেন্স</span>
+                <span class="wallet-balance">৳1,250</span>
+            </div>
+            <div class="wallet-actions">
+                <span class="wallet-action">Add</span>
+                <span class="wallet-action">Send</span>
+            </div>
+        </div>
+
+        <!-- Premium Ribbon -->
+        <div class="premium-ribbon">
+            <i class="fas fa-crown"></i>
+            <span>প্রফেশনাল মার্কেট সক্রিয়</span>
+            <i class="fas fa-shield-alt"></i>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalGmails">24</div>
+                <div class="stat-label">Gmail</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgPrice">৳15</div>
+                <div class="stat-label">গড় মূল্য</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="verifiedCount">18</div>
+                <div class="stat-label">Verified</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="onlineCount">12</div>
+                <div class="stat-label">Online</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions (Floating) -->
+        <div class="quick-actions">
+            <div class="quick-btn" onclick="openCompare()">
+                <i class="fas fa-exchange-alt"></i>
+                <span>তুলনা</span>
+            </div>
+            <div class="quick-btn" onclick="openFavorites()">
+                <i class="fas fa-heart"></i>
+                <span>পছন্দ</span>
+            </div>
+            <div class="quick-btn" onclick="openPriceAlert()">
+                <i class="fas fa-bell"></i>
+                <span>Price Alert</span>
+            </div>
+            <div class="quick-btn" onclick="toggleBulkMode()">
+                <i class="fas fa-layer-group"></i>
+                <span>Bulk Buy</span>
+            </div>
+        </div>
+
+        <!-- Price Info Card -->
+        <div class="price-info">
+            <div class="price-info-left">
+                <span class="price-label">আজকের ফিক্সড মূল্য</span>
+                <span class="price-main" id="fixedPrice">৳15</span>
+            </div>
+            <div class="price-badge">
+                <i class="fas fa-shield-alt"></i> Escrow
+            </div>
+        </div>
+
+        <!-- Fee Info -->
+        <div class="fee-info">
+            <div class="fee-left">
+                <i class="fas fa-info-circle"></i>
+                <span>ক্রয় ফি (প্রতি Gmail)</span>
+            </div>
+            <div class="fee-right" id="feeAmount">৳1</div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Gmail বা বিক্রেতা সার্চ করুন...">
+            </div>
+
+            <div class="filter-toggle">
+                <span><i class="fas fa-sliders-h"></i> উন্নত ফিল্টার</span>
+                <button onclick="toggleFilter()" id="filterToggleBtn">খুলুন <i class="fas fa-chevron-down"></i></button>
+            </div>
+
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-group">
+                    <div class="filter-title">বিক্রেতা টাইপ</div>
+                    <div class="filter-chips">
+                        <span class="chip" data-filter="verified">✓ Verified</span>
+                        <span class="chip" data-filter="premium">👑 Premium</span>
+                        <span class="chip" data-filter="toprated">⭐ 4.5+</span>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Gmail ধরন</div>
+                    <div class="filter-chips">
+                        <span class="chip" data-filter="recovery">🔄 Recovery</span>
+                        <span class="chip" data-filter="old">📅 পুরাতন</span>
+                        <span class="chip" data-filter="warranty">🛡️ ওয়ারেন্টি</span>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">মূল্য রেঞ্জ</div>
+                    <div class="price-range">
+                        <input type="range" id="priceRange" min="5" max="50" value="15">
+                        <div class="range-values">
+                            <span>৳5</span>
+                            <span id="selectedMax">৳15</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button class="btn btn-details" onclick="resetFilters()" style="flex:1;">রিসেট</button>
+                    <button class="btn btn-buy" onclick="applyFilters()" style="flex:1;">প্রয়োগ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Buy Panel (Hidden by Default) -->
+        <div class="bulk-panel hidden" id="bulkPanel">
+            <div class="bulk-row">
+                <span><i class="fas fa-layer-group"></i> <span id="bulkCount">0</span> টি Gmail সিলেক্টেড</span>
+                <span class="bulk-total" id="bulkTotal">৳0</span>
+            </div>
+            <div class="bulk-row">
+                <span>Bulk ডিস্কাউন্ট (5%)</span>
+                <span class="bulk-discount" id="bulkDiscount">-৳0</span>
+            </div>
+            <div class="bulk-row">
+                <span>পরিশোধযোগ্য</span>
+                <span style="color:#F59E0B; font-weight:700;" id="bulkFinal">৳0</span>
+            </div>
+            <button class="btn-bulk" id="bulkBuyBtn" disabled onclick="confirmBulkBuy()">Bulk ক্রয় করুন</button>
+        </div>
+
+        <!-- Gmail Cards Container -->
+        <div id="gmailContainer"></div>
+
+        <!-- Security Alert -->
+        <div class="alert">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+                <strong>নিরাপদ ক্রয়:</strong> Escrow পেমেন্ট | 48h ওয়ারেন্টি | বিরোধ নিষ্পত্তি কেন্দ্র
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation - 6 Items -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="navigate('p2p')">
+            <i class="fas fa-handshake"></i>
+            <span>P2P</span>
+        </div>
+        <div class="nav-item" onclick="navigate('order')">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Order</span>
+        </div>
+        <div class="nav-item" onclick="navigate('buy')">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Buy</span>
+        </div>
+        <div class="nav-item" onclick="navigate('sell')">
+            <i class="fas fa-plus-circle"></i>
+            <span>Sell</span>
+        </div>
+        <div class="nav-item" onclick="navigate('generate')">
+            <i class="fas fa-magic"></i>
+            <span>Generate</span>
+        </div>
+        <div class="nav-item" onclick="navigate('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Compare Modal -->
+    <div class="modal-overlay" id="compareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>তুলনা করুন</h3>
+                <span class="modal-close" onclick="closeModal('compareModal')">&times;</span>
+            </div>
+            <div id="compareContent"></div>
+        </div>
+    </div>
+
+    <!-- Favorites Modal -->
+    <div class="modal-overlay" id="favoritesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>পছন্দসমূহ</h3>
+                <span class="modal-close" onclick="closeModal('favoritesModal')">&times;</span>
+            </div>
+            <div id="favoritesContent"></div>
+        </div>
+    </div>
+
+    <!-- Price Alert Modal -->
+    <div class="modal-overlay" id="alertModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Price Alert</h3>
+                <span class="modal-close" onclick="closeModal('alertModal')">&times;</span>
+            </div>
+            <div id="alertContent"></div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="modal-overlay" id="chatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>চ্যাট</h3>
+                <span class="modal-close" onclick="closeModal('chatModal')">&times;</span>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="মেসেজ লিখুন...">
+                <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Gmail বিস্তারিত</h3>
+                <span class="modal-close" onclick="closeModal('detailsModal')">&times;</span>
+            </div>
+            <div id="detailsContent"></div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:#10B981;">ক্রয় সফল!</h3>
+                <span class="modal-close" onclick="closeModal('successModal')">&times;</span>
+            </div>
+            <div id="successContent"></div>
+        </div>
+    </div>
+
+    <!-- Escrow Modal -->
+    <div class="modal-overlay" id="escrowModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Escrow পেমেন্ট</h3>
+                <span class="modal-close" onclick="closeModal('escrowModal')">&times;</span>
+            </div>
+            <div style="padding:16px;">
+                <p>আপনার টাকা escrow-এ সুরক্ষিত থাকবে। Gmail চেক করার পর বিক্রেতা পেমেন্ট পাবে।</p>
+                <button class="btn btn-buy" style="width:100%; margin-top:16px;" onclick="closeModal('escrowModal')">বুঝেছি</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let gmails = [];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let compareList = [];
+        let bulkList = [];
+        let priceAlerts = JSON.parse(localStorage.getItem('priceAlerts')) || [];
+        let currentChatId = null;
+        const adminFee = 1;
+        const fixedPrice = 15;
+
+        // Sample Data
+        const sampleGmails = [
+            {
+                id: 1,
+                seller: { name: 'রফিকুল ইসলাম', avatar: 'র', verified: true, premium: true, rating: 4.8, response: '৫ মিনিট' },
+                gmail: 'rafikul.islam456@gmail.com',
+                password: 'Rafikul@123',
+                recovery: 'rafikul.backup@gmail.com',
+                price: 18,
+                originalPrice: 15,
+                time: '৫ মিনিট আগে',
+                quality: 'Premium',
+                verifiedGmail: true,
+                warranty: true,
+                featured: true
+            },
+            {
+                id: 2,
+                seller: { name: 'সুমাইয়া আক্তার', avatar: 'স', verified: true, premium: false, rating: 4.5, response: '১৫ মিনিট' },
+                gmail: 'sumaiya.akter78@gmail.com',
+                password: 'Sumaiya@789',
+                recovery: null,
+                price: 13,
+                originalPrice: 15,
+                time: '১৫ মিনিট আগে',
+                quality: 'Good',
+                verifiedGmail: true,
+                warranty: true,
+                featured: false
+            },
+            {
+                id: 3,
+                seller: { name: 'আব্দুল করিম', avatar: 'আ', verified: false, premium: false, rating: 3.8, response: '১ ঘন্টা' },
+                gmail: 'karim.bd2023@gmail.com',
+                password: 'Karim@2023',
+                recovery: 'karim.recovery@gmail.com',
+                price: 15,
+                originalPrice: 15,
+                time: '১ ঘন্টা আগে',
+                quality: 'Basic',
+                verifiedGmail: false,
+                warranty: false,
+                featured: false
+            },
+            {
+                id: 4,
+                seller: { name: 'নাজমুল হোসেন', avatar: 'ন', verified: true, premium: true, rating: 4.9, response: '২ মিনিট' },
+                gmail: 'nazmul.hossain99@gmail.com',
+                password: 'Nazmul@999',
+                recovery: 'nazmul.backup@gmail.com',
+                price: 20,
+                originalPrice: 15,
+                time: '২ ঘন্টা আগে',
+                quality: 'Premium',
+                verifiedGmail: true,
+                warranty: true,
+                featured: true
+            },
+            {
+                id: 5,
+                seller: { name: 'ফারহানা আক্তার', avatar: 'ফ', verified: true, premium: false, rating: 4.6, response: '১০ মিনিট' },
+                gmail: 'farhana.akter23@gmail.com',
+                password: 'Farhana@23',
+                recovery: null,
+                price: 12,
+                originalPrice: 15,
+                time: '৩ ঘন্টা আগে',
+                quality: 'Good',
+                verifiedGmail: true,
+                warranty: true,
+                featured: false
+            },
+            {
+                id: 6,
+                seller: { name: 'সোহেল রানা', avatar: 'সো', verified: true, premium: true, rating: 4.7, response: '৫ মিনিট' },
+                gmail: 'sohel.rana2024@gmail.com',
+                password: 'Sohel@2024',
+                recovery: 'sohel.backup@gmail.com',
+                price: 16,
+                originalPrice: 15,
+                time: '৫ ঘন্টা আগে',
+                quality: 'Premium',
+                verifiedGmail: true,
+                warranty: true,
+                featured: false
+            }
+        ];
+
+        gmails = [...sampleGmails];
+
+        // Render Cards
+        function renderCards() {
+            const container = document.getElementById('gmailContainer');
+            let html = '';
+
+            gmails.forEach(g => {
+                const isFav = favorites.includes(g.id);
+                const isCompare = compareList.includes(g.id);
+                const isBulk = bulkList.includes(g.id);
+                const diff = g.price - fixedPrice;
+                const total = g.price + adminFee;
+
+                html += `
+                    <div class="gmail-card ${g.featured ? 'featured' : ''}" data-id="${g.id}">
+                        ${g.featured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
+                        
+                        <!-- Favorite Heart -->
+                        <div class="favorite-heart ${isFav ? 'active' : ''}" onclick="toggleFavorite(${g.id})">
+                            <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+                        </div>
+
+                        <!-- Price Tag -->
+                        <div class="price-tag">
+                            ৳${g.price}
+                            <span class="price-diff">${diff > 0 ? '+'+diff : diff < 0 ? diff : ''}</span>
+                        </div>
+
+                        <!-- Seller Header -->
+                        <div class="seller-header">
+                            <div class="seller-avatar">${g.seller.avatar}</div>
+                            <div class="seller-info">
+                                <div class="seller-name">
+                                    ${g.seller.name}
+                                    ${g.seller.verified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                                    ${g.seller.premium ? '<span class="premium-badge">👑 Premium</span>' : ''}
+                                </div>
+                                <div class="rating">
+                                    <span class="stars">${'★'.repeat(Math.floor(g.seller.rating))}${'☆'.repeat(5-Math.floor(g.seller.rating))}</span>
+                                    <span>${g.seller.rating}</span>
+                                    <span class="time"><i class="far fa-clock"></i> ${g.time}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature Badges -->
+                        <div class="badge-container">
+                            ${g.verifiedGmail ? '<span class="feature-badge"><i class="fas fa-check-circle"></i> Verified Gmail</span>' : ''}
+                            ${g.warranty ? '<span class="feature-badge"><i class="fas fa-shield-alt"></i> 48h Warranty</span>' : ''}
+                        </div>
+
+                        <!-- Gmail Details Table -->
+                        <div class="details-table">
+                            <div class="table-row">
+                                <span class="table-label">Gmail</span>
+                                <span class="table-value gmail-address">${g.gmail}</span>
+                            </div>
+                            <div class="table-row">
+                                <span class="table-label">গুণগত মান</span>
+                                <span class="table-value">${g.quality}</span>
+                            </div>
+                            <div class="table-row">
+                                <span class="table-label">রিকভারি</span>
+                                <span class="table-value">${g.recovery ? 'হ্যাঁ' : 'না'}</span>
+                            </div>
+                            <div class="table-row">
+                                <span class="table-label">বিক্রেতা রেসপন্স</span>
+                                <span class="table-value">${g.seller.response}</span>
+                            </div>
+                            <div class="table-row">
+                                <span class="table-label">ক্রয় ফি</span>
+                                <span class="table-value" style="color:#F59E0B;">+৳${adminFee}</span>
+                            </div>
+                            <div class="table-row">
+                                <span class="table-label">সর্বমোট</span>
+                                <span class="table-value total-price">৳${total}</span>
+                            </div>
+                        </div>
+
+                        <!-- Compare & Bulk Checkboxes -->
+                        <div class="card-footer">
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="compare-check" data-id="${g.id}" ${isCompare ? 'checked' : ''} onchange="toggleCompare(${g.id})">
+                                <span>তুলনা করুন</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="bulk-check" data-id="${g.id}" ${isBulk ? 'checked' : ''} onchange="toggleBulk(${g.id})">
+                                <span>Bulk</span>
+                            </label>
+                        </div>
+
+                        <!-- 3 Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="btn btn-buy" onclick="buyNow(${g.id})"><i class="fas fa-shopping-cart"></i> ক্রয় করুন</button>
+                            <button class="btn btn-chat" onclick="openChat(${g.id})"><i class="fas fa-comment"></i> Message</button>
+                            <button class="btn btn-details" onclick="showDetails(${g.id})"><i class="fas fa-info-circle"></i> বিস্তারিত</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            updateStats();
+            updateBulkPanel();
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('totalGmails').innerText = gmails.length;
+            const avg = gmails.reduce((a, b) => a + b.price, 0) / gmails.length || 0;
+            document.getElementById('avgPrice').innerText = '৳' + Math.round(avg);
+            document.getElementById('verifiedCount').innerText = gmails.filter(g => g.seller.verified).length;
+        }
+
+        // Favorites
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index === -1) {
+                favorites.push(id);
+                showToast('পছন্দের তালিকায় যোগ করা হয়েছে', 'success');
+            } else {
+                favorites.splice(index, 1);
+                showToast('পছন্দের তালিকা থেকে সরানো হয়েছে');
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderCards();
+        }
+
+        // Compare (max 3)
+        function toggleCompare(id) {
+            const index = compareList.indexOf(id);
+            if (index === -1) {
+                if (compareList.length >= 3) {
+                    showToast('সর্বোচ্চ ৩টি Gmail তুলনা করতে পারবেন', 'warning');
+                    return;
+                }
+                compareList.push(id);
+            } else {
+                compareList.splice(index, 1);
+            }
+            renderCards();
+        }
+
+        // Bulk
+        function toggleBulk(id) {
+            const index = bulkList.indexOf(id);
+            if (index === -1) {
+                bulkList.push(id);
+            } else {
+                bulkList.splice(index, 1);
+            }
+            updateBulkPanel();
+            renderCards();
+        }
+
+        function updateBulkPanel() {
+            const panel = document.getElementById('bulkPanel');
+            if (bulkList.length === 0) {
+                panel.classList.add('hidden');
+                return;
+            }
+            panel.classList.remove('hidden');
+
+            let total = 0;
+            bulkList.forEach(id => {
+                const g = gmails.find(g => g.id === id);
+                if (g) total += g.price + adminFee;
+            });
+
+            const discount = total * 0.05;
+            const final = total - discount;
+
+            document.getElementById('bulkCount').innerText = bulkList.length;
+            document.getElementById('bulkTotal').innerText = '৳' + total.toFixed(0);
+            document.getElementById('bulkDiscount').innerText = '-৳' + discount.toFixed(0);
+            document.getElementById('bulkFinal').innerText = '৳' + final.toFixed(0);
+            document.getElementById('bulkBuyBtn').disabled = bulkList.length < 2;
+        }
+
+        function toggleBulkMode() {
+            document.getElementById('bulkPanel').classList.toggle('hidden');
+        }
+
+        function confirmBulkBuy() {
+            if (bulkList.length < 2) return;
+            openModal('escrowModal');
+            setTimeout(() => {
+                closeModal('escrowModal');
+                showToast('Bulk ক্রয় সফল!', 'success');
+                bulkList = [];
+                updateBulkPanel();
+                renderCards();
+            }, 2000);
+        }
+
+        // Buy Now
+        function buyNow(id) {
+            openModal('escrowModal');
+            setTimeout(() => {
+                closeModal('escrowModal');
+                showToast('ক্রয় প্রক্রিয়া শুরু হয়েছে...', 'success');
+                setTimeout(() => {
+                    openModal('successModal');
+                    document.getElementById('successContent').innerHTML = `
+                        <div style="text-align:center; padding:16px;">
+                            <i class="fas fa-check-circle" style="font-size:4rem; color:#10B981;"></i>
+                            <p style="margin:16px 0;">আপনার Gmail ক্রয় সফল হয়েছে!</p>
+                            <button class="btn btn-buy" onclick="closeModal('successModal')">ঠিক আছে</button>
+                        </div>
+                    `;
+                }, 1000);
+            }, 2000);
+        }
+
+        // Chat
+        function openChat(id) {
+            currentChatId = id;
+            openModal('chatModal');
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message received">বিক্রেতা: হ্যালো, আপনার প্রশ্ন জিজ্ঞাসা করুন</div>
+            `;
+        }
+
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            if (input.value.trim()) {
+                const messages = document.getElementById('chatMessages');
+                messages.innerHTML += `<div class="message sent">আপনি: ${input.value}</div>`;
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        // Show Details
+        function showDetails(id) {
+            const g = gmails.find(g => g.id === id);
+            if (!g) return;
+
+            const total = g.price + adminFee;
+            document.getElementById('detailsContent').innerHTML = `
+                <div class="details-table">
+                    <div class="table-row"><span class="table-label">Gmail</span><span class="table-value gmail-address">${g.gmail}</span></div>
+                    <div class="table-row"><span class="table-label">পাসওয়ার্ড</span><span class="table-value">••••••••</span></div>
+                    <div class="table-row"><span class="table-label">রিকভারি</span><span class="table-value">${g.recovery || 'নেই'}</span></div>
+                    <div class="table-row"><span class="table-label">বিক্রেতা</span><span class="table-value">${g.seller.name}</span></div>
+                    <div class="table-row"><span class="table-label">মূল্য</span><span class="table-value">৳${g.price}</span></div>
+                    <div class="table-row"><span class="table-label">ক্রয় ফি</span><span class="table-value">৳${adminFee}</span></div>
+                    <div class="table-row"><span class="table-label">সর্বমোট</span><span class="table-value total-price">৳${total}</span></div>
+                </div>
+                <button class="btn btn-buy" style="width:100%; margin-top:16px;" onclick="buyNow(${g.id})">ক্রয় করুন</button>
+            `;
+            openModal('detailsModal');
+        }
+
+        // Compare Modal
+        function openCompare() {
+            if (compareList.length < 2) {
+                showToast('তুলনা করতে কমপক্ষে ২টি Gmail সিলেক্ট করুন', 'warning');
+                return;
+            }
+
+            const selected = compareList.map(id => gmails.find(g => g.id === id)).filter(Boolean);
+            let html = '<table class="compare-table"><tr><th>বিবরণ</th>';
+
+            selected.forEach(g => {
+                html += `<th>${g.gmail.substring(0, 10)}...</th>`;
+            });
+            html += '</tr>';
+
+            const rows = [
+                { label: 'বিক্রেতা', field: g => g.seller.name },
+                { label: 'রেটিং', field: g => g.seller.rating + ' ★' },
+                { label: 'মূল্য', field: g => '৳' + g.price },
+                { label: 'গুণগত মান', field: g => g.quality },
+                { label: 'রিকভারি', field: g => g.recovery ? 'হ্যাঁ' : 'না' },
+                { label: 'ওয়ারেন্টি', field: g => g.warranty ? '৪৮h' : 'না' }
+            ];
+
+            rows.forEach(row => {
+                html += '<tr><td>' + row.label + '</td>';
+                selected.forEach(g => {
+                    html += '<td>' + row.field(g) + '</td>';
+                });
+                html += '</tr>';
+            });
+
+            html += '</table>';
+            document.getElementById('compareContent').innerHTML = html;
+            openModal('compareModal');
+        }
+
+        // Favorites Modal
+        function openFavorites() {
+            const favGmails = gmails.filter(g => favorites.includes(g.id));
+            let html = '';
+
+            if (favGmails.length === 0) {
+                html = '<p style="text-align:center; color:#aaa;">কোনো পছন্দের Gmail নেই</p>';
+            } else {
+                favGmails.forEach(g => {
+                    html += `
+                        <div class="gmail-card" style="margin-bottom:12px;">
+                            <div class="table-row">
+                                <span>${g.gmail}</span>
+                                <span class="total-price">৳${g.price}</span>
+                            </div>
+                            <div style="display:flex; gap:8px; margin-top:12px;">
+                                <button class="btn btn-buy" style="padding:8px;" onclick="buyNow(${g.id})">ক্রয়</button>
+                                <button class="btn btn-details" style="padding:8px;" onclick="removeFavorite(${g.id})">সরান</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('favoritesContent').innerHTML = html;
+            openModal('favoritesModal');
+        }
+
+        function removeFavorite(id) {
+            favorites = favorites.filter(f => f !== id);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderCards();
+            openFavorites();
+            showToast('পছন্দ থেকে সরানো হয়েছে');
+        }
+
+        // Price Alert Modal
+        function openPriceAlert() {
+            let html = `
+                <div style="margin-bottom:16px;">
+                    <input type="text" id="alertEmail" class="search-box" style="width:100%; padding:12px;" placeholder="Gmail ঠিকানা">
+                    <input type="number" id="alertPrice" class="search-box" style="width:100%; padding:12px; margin-top:8px;" placeholder="সর্বোচ্চ মূল্য (৳)">
+                    <button class="btn btn-buy" style="width:100%; margin-top:12px;" onclick="createPriceAlert()">Alert সেট করুন</button>
+                </div>
+                <hr style="border-color:#1E3A5F; margin:16px 0;">
+                <h4 style="color:#4CC9F0; margin-bottom:12px;">আপনার Alerts</h4>
+            `;
+
+            if (priceAlerts.length === 0) {
+                html += '<p style="color:#aaa;">কোনো Alert নেই</p>';
+            } else {
+                priceAlerts.forEach((alert, index) => {
+                    html += `
+                        <div class="table-row">
+                            <span>${alert.email}</span>
+                            <span>৳${alert.price}</span>
+                            <span style="color:#10B981;">সক্রিয়</span>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('alertContent').innerHTML = html;
+            openModal('alertModal');
+        }
+
+        function createPriceAlert() {
+            const email = document.getElementById('alertEmail').value;
+            const price = document.getElementById('alertPrice').value;
+
+            if (!email || !price) {
+                showToast('সঠিক তথ্য দিন', 'warning');
+                return;
+            }
+
+            priceAlerts.push({ email, price, active: true });
+            localStorage.setItem('priceAlerts', JSON.stringify(priceAlerts));
+            showToast('Price Alert সেট করা হয়েছে', 'success');
+            openPriceAlert();
+        }
+
+        // Search
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const term = this.value.toLowerCase();
+            if (!term) {
+                gmails = [...sampleGmails];
+            } else {
+                gmails = sampleGmails.filter(g => 
+                    g.gmail.toLowerCase().includes(term) || 
+                    g.seller.name.toLowerCase().includes(term)
+                );
+            }
+            renderCards();
+        });
+
+        // Filter
+        function toggleFilter() {
+            const panel = document.getElementById('filterPanel');
+            const btn = document.getElementById('filterToggleBtn');
+            panel.classList.toggle('show');
+            btn.innerText = panel.classList.contains('show') ? 'বন্ধ করুন' : 'খুলুন';
+        }
+
+        document.getElementById('priceRange').addEventListener('input', function() {
+            document.getElementById('selectedMax').innerText = '৳' + this.value;
+        });
+
+        function applyFilters() {
+            const maxPrice = parseInt(document.getElementById('priceRange').value);
+            gmails = sampleGmails.filter(g => g.price <= maxPrice);
+            renderCards();
+            toggleFilter();
+        }
+
+        function resetFilters() {
+            document.getElementById('priceRange').value = 15;
+            document.getElementById('selectedMax').innerText = '৳15';
+            gmails = [...sampleGmails];
+            renderCards();
+            showToast('ফিল্টার রিসেট করা হয়েছে');
+        }
+
+        // Modal Functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 20px;
+                right: 20px;
+                max-width: 400px;
+                margin: 0 auto;
+                background: ${type === 'success' ? '#10B981' : type === 'warning' ? '#F59E0B' : '#4361EE'};
+                color: white;
+                padding: 16px 20px;
+                border-radius: 40px;
+                text-align: center;
+                font-weight: 500;
+                z-index: 2000;
+                animation: slideUp 0.3s;
+            `;
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // Navigation
+        function navigate(page) {
+            showToast(`${page} পেজে যাচ্ছেন...`);
+        }
+
+        function openWallet() {
+            showToast('ওয়ালেট ব্যালেন্স: ৳1,250');
+        }
+
+        function toggleNotifications() {
+            showToast('৩টি নতুন নোটিফিকেশন', 'info');
+        }
+
+        // Initialize
+        renderCards();
+    </script>
+</body>
+</html>

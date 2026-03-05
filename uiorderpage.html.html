@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Create&Earn V5 · প্রো অর্ডার</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Hind Siliguri',sans-serif;}
+        body{
+            background:linear-gradient(145deg,#0b1725,#121b2f);
+            color:#fff;
+            line-height:1.5;
+            max-width:450px;
+            margin:0 auto;
+            position:relative;
+            min-height:100vh;
+            box-shadow:0 0 40px rgba(0,0,0,.6);
+            overflow-x:hidden;
+        }
+        .container{padding:20px 16px 100px;}
+
+        /* === floating top bar (wallet+notification) === */
+        .floating-top{
+            position:sticky;
+            top:0;
+            z-index:1100;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            background:rgba(10,20,35,0.85);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            padding:12px 20px;
+            border-bottom:1px solid #2a3f60;
+            box-shadow:0 4px 20px rgba(0,0,0,0.4);
+        }
+        .app-title{font-size:24px;font-weight:700;background:linear-gradient(135deg,#a0e9ff,#4a80e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .top-actions{display:flex;gap:18px;}
+        .top-icon{
+            width:44px;height:44px;border-radius:30px;
+            background:rgba(30,60,100,0.5);
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;color:#7bc9ff;border:1px solid #3065b5;
+            transition:0.2s;
+        }
+        .top-icon:hover{background:#1f3e6e;transform:scale(1.05);}
+
+        /* === floating sub-navigation (5 page) – touch animated === */
+        .sub-nav-floating{
+            position:sticky;
+            top:74px;
+            z-index:1090;
+            background:rgba(16,28,45,0.9);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            display:flex;
+            justify-content:space-around;
+            padding:8px 10px;
+            border-bottom:1px solid #2f4668;
+            box-shadow:0 6px 14px rgba(0,0,0,.5);
+            gap:6px;
+        }
+        .sub-nav-item{
+            flex:1;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            background:transparent;
+            border:none;
+            color:#a0b8d4;
+            font-size:13px;
+            font-weight:500;
+            padding:6px 2px;
+            border-radius:24px;
+            transition:all 0.2s cubic-bezier(0.2,0.9,0.3,1.2);
+            cursor:pointer;
+            white-space:nowrap;
+        }
+        .sub-nav-item i{font-size:22px;margin-bottom:2px;}
+        .sub-nav-item.active{
+            background:linear-gradient(145deg,#1d3d70,#143155);
+            color:#9fd0ff;
+            transform:translateY(-3px);
+            box-shadow:0 7px 10px #0d1e38;
+        }
+        .sub-nav-item:active{transform:scale(0.95);}
+
+        /* page content */
+        .page-content{display:none;animation:fade 0.3s;}
+        .page-content.active{display:block;}
+        @keyframes fade{0%{opacity:0.4;}100%{opacity:1;}}
+
+        /* improved card / widget styles – floating effect */
+        .glass-card{
+            background:rgba(25,40,60,0.6);
+            backdrop-filter:blur(10px);
+            -webkit-backdrop-filter:blur(10px);
+            border:1px solid #3f5780;
+            border-radius:28px;
+            padding:18px 16px;
+            box-shadow:0 15px 28px -8px #030611;
+            transition:0.15s;
+        }
+        .float-widget{
+            transition:transform 0.2s ease, box-shadow 0.3s;
+            cursor:default;
+        }
+        .float-widget:hover{transform:translateY(-5px);box-shadow:0 24px 34px -12px #0b1a33;}
+
+        /* price insight card (touching animated) */
+        .price-comparison-widget{
+            background:linear-gradient(125deg,#182c44,#1d2f4b);
+            border-radius:32px;
+            padding:18px;
+            margin:20px 0;
+            border-left:6px solid #3f8aff;
+            box-shadow:0 15px 30px -10px #040c18;
+        }
+        .price-bar-container{height:12px;background:#1b314f;border-radius:40px;overflow:hidden;}
+
+        /* data generation section */
+        .data-options-container{display:flex;gap:14px;margin:15px 0;}
+        .data-option-btn{
+            flex:1;padding:14px;border-radius:50px;border:1.5px solid #2b5180;
+            background:rgba(20,40,65,0.7);color:#b6d0f0;font-weight:600;
+            transition:0.15s;display:flex;align-items:center;justify-content:center;gap:6px;
+        }
+        .data-option-btn.active{background:#2765c0;border-color:#95c4ff;color:#fff;box-shadow:0 0 12px #4080ff;}
+        .field-options{display:flex;justify-content:space-between;align-items:center;margin-top:18px;}
+        .field-buttons{display:flex;gap:6px;}
+        .field-btn{
+            padding:6px 14px;border-radius:40px;border:1px solid #315d96;background:#1e3452;color:#afcbff;font-size:12px;
+        }
+        .field-btn.active{background:#3c70c0;color:#fff;}
+
+        /* fixed data fields */
+        .fixed-data-fields{margin-top:20px;}
+
+        /* quick payment modal (small) */
+        .modal-overlay{
+            position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:3000;
+            display:flex;align-items:center;justify-content:center;
+            visibility:hidden;opacity:0;transition:0.2s;padding:20px;
+        }
+        .modal-overlay.active{visibility:visible;opacity:1;}
+        .modal-content.small{
+            max-width:360px;width:100%;background:#16263b;border-radius:40px;
+            border:2px solid #3962ae;padding:22px;box-shadow:0 30px 60px #00000080;
+        }
+
+        /* received / search bar */
+        .search-bar{
+            display:flex;gap:8px;margin:20px 0 15px;
+        }
+        .search-bar input{
+            flex:1;background:#1f314a;border:1px solid #4f6e9b;border-radius:60px;
+            padding:14px 18px;color:#fff;font-size:15px;
+        }
+        .search-bar button{
+            background:#1f3a62;border:none;border-radius:50px;width:54px;color:#aad0ff;
+        }
+
+        /* receive grid card */
+        .received-compact-card{
+            background:#1a2c44;border-radius:22px;padding:12px 16px;margin-bottom:10px;
+            display:flex;justify-content:space-between;align-items:center;
+            border-left:5px solid #5688d0;cursor:pointer;transition:0.1s;
+        }
+        .received-compact-card:active{background:#24466b;}
+
+        /* pagination */
+        .pagination{display:flex;gap:10px;justify-content:center;margin:20px 0;}
+
+        /* bottom floating navigation 6 page (P2P, order, buy, sell, generate, profile) */
+        .bottom-nav{
+            position:fixed;bottom:0;left:0;right:0;max-width:450px;margin:0 auto;
+            background:rgba(12,23,40,0.95);backdrop-filter:blur(20px);
+            border-top:2px solid #2e4b77;border-radius:30px 30px 0 0;
+            display:flex;justify-content:space-around;padding:12px 8px 8px;
+            z-index:2000;box-shadow:0 -6px 25px #010813;
+        }
+        .nav-item{
+            display:flex;flex-direction:column;align-items:center;background:transparent;
+            border:none;color:#98b2da;font-size:11px;font-weight:600;gap:4px;
+            transition:0.2s;padding:4px 8px;border-radius:30px;width:60px;
+        }
+        .nav-item i{font-size:22px;}
+        .nav-item.active{
+            background:#2a4879;color:#c6e2ff;transform:translateY(-6px);
+            box-shadow:0 10px 16px #030c1c;
+        }
+
+        /* template card */
+        .template-card-modern{
+            background:linear-gradient(145deg,#1e3452, #17263f);border-radius:28px;padding:18px;
+            border:1px solid #406aa8;margin-bottom:12px;position:relative;
+        }
+
+        /* schedule chip */
+        .schedule-chip{
+            display:inline-flex;background:#122f50;border-radius:50px;padding:8px 15px;
+            align-items:center;gap:8px;margin:10px 4px;
+        }
+
+        /* ===== small tutorial popup (not fullscreen) ===== */
+        .tutorial-popup{
+            position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+            z-index:4000;max-width:340px;width:90%;background:#17263f;
+            border-radius:42px;border:3px solid #5b8de0;padding:24px 20px;
+            box-shadow:0 30px 50px #000000b3;display:none;
+        }
+        .tutorial-popup.show{display:block;}
+        .tutorial-step-list{display:flex;flex-direction:column;gap:16px;margin:20px 0;}
+    </style>
+</head>
+<body>
+    <!-- floating top bar with wallet & notification -->
+    <div class="floating-top">
+        <div class="app-title">Create&Earn V5</div>
+        <div class="top-actions">
+            <div class="top-icon"><i class="fas fa-wallet"></i></div>
+            <div class="top-icon"><i class="fas fa-bell"></i></div>
+        </div>
+    </div>
+
+    <!-- floating sub-navigation (order, template, received, history, draft) -->
+    <div class="sub-nav-floating">
+        <button class="sub-nav-item active" data-page="order"><i class="fas fa-shopping-cart"></i><span>অর্ডার</span></button>
+        <button class="sub-nav-item" data-page="template"><i class="fas fa-layer-group"></i><span>টেমপ্লেট</span></button>
+        <button class="sub-nav-item" data-page="received"><i class="fas fa-download"></i><span>রিসিভড</span></button>
+        <button class="sub-nav-item" data-page="history"><i class="fas fa-history"></i><span>হিস্টরি</span></button>
+        <button class="sub-nav-item" data-page="draft"><i class="fas fa-save"></i><span>ড্রাফট</span></button>
+    </div>
+
+    <!-- main container -->
+    <div class="container" id="main-container">
+        <!-- ORDER PAGE (active) -->
+        <div class="page-content active" id="order-page">
+            <!-- progress indicator removed (as requested) -->
+            
+            <!-- floating insight cards: success rate + balance -->
+            <div style="display:flex; gap:12px; margin-bottom:20px;">
+                <div class="glass-card float-widget" style="flex:1;" onclick="showNotif('সাফল্যের হার ৮৫%')">
+                    <div><i class="fas fa-chart-line" style="color:#3fcb92;"></i> সাফল্যের হার</div>
+                    <div style="font-size:30px; font-weight:700; color:#a3f0cf;">৮৫%</div>
+                    <div style="color:#a0b0c0;">গত ১০টি অর্ডার</div>
+                </div>
+                <div class="glass-card float-widget" style="flex:1;" onclick="showNotif('ব্যালেন্স ৳১৫০০')">
+                    <div><i class="fas fa-wallet" style="color:#f5b342;"></i> ব্যালেন্স</div>
+                    <div style="font-size:30px; font-weight:700; color:#ffd966;">৳১,৫০০</div>
+                    <div style="color:#a0b0c0;">পর্যাপ্ত ফান্ড</div>
+                </div>
+            </div>
+
+            <!-- market price widget (detailed & floating) -->
+            <div class="price-comparison-widget float-widget">
+                <div style="display:flex; justify-content:space-between;">
+                    <span><i class="fas fa-chart-bar"></i> মার্কেট প্রাইস</span>
+                    <span class="market-price-range" style="background:#1c3b61; padding:4px 14px; border-radius:40px;">৳২.০০-৳৩.৫০</span>
+                </div>
+                <div style="margin:15px 0;">
+                    <div class="price-bar"><span>সর্বনিম্ন</span> <div class="price-bar-container"><div style="width:30%; background:#ef4444; height:100%;"></div></div> <span>৳২.০০</span></div>
+                    <div class="price-bar"><span>গড়</span> <div class="price-bar-container"><div style="width:50%; background:#f59e0b; height:100%;"></div></div> <span>৳২.৭৫</span></div>
+                    <div class="price-bar"><span>আপনার</span> <div class="price-bar-container"><div id="your-price-bar" style="width:45%; background:#10b981; height:100%;"></div></div> <span id="yourPriceLabel">৳২.৫০</span></div>
+                    <div class="price-bar"><span>সর্বোচ্চ</span> <div class="price-bar-container"><div style="width:70%; background:#4361ee; height:100%;"></div></div> <span>৳৩.৫০</span></div>
+                </div>
+                <div style="background:#1f4763; border-radius:60px; padding:12px; text-align:center;">
+                    <i class="fas fa-lightbulb" style="color:#f5b342;"></i> <strong>স্মার্ট প্রাইস সাজেশন</strong> ৳২.৮০ দিলে ২ ঘন্টায় ৯৫% সম্ভাবনা
+                </div>
+            </div>
+
+            <!-- Order type & limit & price etc (minimal) -->
+            <div class="glass-card" style="margin:18px 0;">
+                <label>অর্ডার আইডি</label>
+                <div class="form-control" id="order-id-display" style="background:#1f3552; padding:12px; border-radius:40px;">ORD-<span id="order-id-number">0012</span></div>
+            </div>
+
+            <div class="glass-card">
+                <label>অর্ডার টাইপ <span style="color:red;">*</span></label>
+                <select class="form-control" id="order-type" style="background:#1f3552; padding:12px; border-radius:40px; width:100%;">
+                    <option>Gmail</option><option>LinkedIn</option><option>TextNow</option><option>Facebook</option>
+                </select>
+            </div>
+
+            <div class="glass-card">
+                <label>লিমিট (কতটি) *</label>
+                <input type="number" id="order-limit" value="50" class="form-control" style="background:#1f3552; padding:12px; border-radius:40px;">
+            </div>
+
+            <!-- Data generate options with fixed/auto per field -->
+            <div class="glass-card">
+                <label>ডাটা জেনারেট অপশন *</label>
+                <div class="data-options-container">
+                    <button class="data-option-btn active" id="order-auto-btn" onclick="selectOrderDataOption('auto')"><i class="fas fa-robot"></i> অটো</button>
+                    <button class="data-option-btn" id="order-fixed-btn" onclick="selectOrderDataOption('fixed')"><i class="fas fa-edit"></i> ফিক্সড</button>
+                </div>
+                <div id="order-fixed-data-fields" style="display:none;">
+                    <!-- name -->
+                    <div class="field-options"><span>নাম</span><div class="field-buttons"><button class="field-btn active" id="order-name-fixed-btn" onclick="selectOrderFieldOption('name','fixed')">ফিক্সড</button><button class="field-btn" id="order-name-auto-btn" onclick="selectOrderFieldOption('name','auto')">অটো</button></div></div>
+                    <input type="text" id="order-fixed-name" placeholder="ফিক্সড নাম" class="form-control" style="margin-bottom:8px;">
+                    
+                    <div class="field-options"><span>জিমেইল</span><div class="field-buttons"><button class="field-btn" id="order-email-fixed-btn" onclick="selectOrderFieldOption('email','fixed')">ফিক্সড</button><button class="field-btn active" id="order-email-auto-btn" onclick="selectOrderFieldOption('email','auto')">অটো</button></div></div>
+                    <div style="display:flex;"><input type="text" id="order-fixed-email" placeholder="username" class="form-control" style="border-radius:40px 0 0 40px;"><span style="background:#1f3552; padding:12px; border-radius:0 40px 40px 0;">@gmail.com</span></div>
+
+                    <div class="field-options" style="margin-top:12px;"><span>পাসওয়ার্ড</span><div class="field-buttons"><button class="field-btn" id="order-password-fixed-btn" onclick="selectOrderFieldOption('password','fixed')">ফিক্সড</button><button class="field-btn active" id="order-password-auto-btn" onclick="selectOrderFieldOption('password','auto')">অটো</button></div></div>
+                    <input type="password" id="order-fixed-password" placeholder="পাসওয়ার্ড" class="form-control">
+
+                    <div class="field-options" style="margin-top:12px;"><span>রিকভারি জিমেইল (optional)</span><div class="field-buttons"><button class="field-btn" onclick="selectOrderFieldOption('recovery','fixed')">ফিক্সড</button><button class="field-btn active" onclick="selectOrderFieldOption('recovery','auto')">অটো</button></div></div>
+                    <input type="text" id="order-fixed-recovery" placeholder="recovery@gmail.com" class="form-control">
+                </div>
+            </div>
+
+            <!-- wallet check & fee -->
+            <div class="glass-card" style="margin:15px 0;">
+                <div><i class="fas fa-wallet"></i> ব্যালেন্স: ৳<span id="wallet-balance-display">1500.00</span></div>
+                <div>প্রয়োজন: ৳<span id="required-fund-display">0.00</span></div>
+                <div id="wallet-status" style="color:#5bd47b;">পর্যাপ্ত ব্যালেন্স</div>
+            </div>
+
+            <button class="btn" style="background:#1f5f9e; width:100%; border-radius:60px; padding:16px;" onclick="confirmOrder()">অর্ডার কনফার্ম করুন</button>
+        </div>
+
+        <!-- TEMPLATE PAGE (dummy) -->
+        <div class="page-content" id="template-page">
+            <h3>টেমপ্লেট</h3>
+            <div class="template-card-modern" onclick="applyTemplate('gmail50')">📧 Gmail 50 pcs – ৳২.৫০/pc (জনপ্রিয়)</div>
+            <div class="template-card-modern" onclick="applyTemplate('gmail100')">📬 Gmail 100 – ৳২.৩০/pc (১০% ছাড়)</div>
+            <div class="template-card-modern" onclick="applyTemplate('gmail200')">📪 Gmail 200 – ৳২.২০/pc</div>
+            <div class="template-card-modern" onclick="createCustomTemplate()">✨ কাস্টম টেমপ্লেট তৈরি করুন</div>
+        </div>
+
+        <!-- RECEIVED PAGE with search & compact cards & modal -->
+        <div class="page-content" id="received-page">
+            <h3>রিসিভড অর্ডার <span style="color:#aac8ff;">যাচাই করুন</span></h3>
+            <div class="search-bar">
+                <input type="text" placeholder="🔍 নাম / কোড / ওয়ার্কার আইডি" id="receiveSearch">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div id="receivedList">
+                <!-- dynamically via js -->
+            </div>
+            <div class="pagination" id="recPagination"></div>
+        </div>
+
+        <!-- HISTORY page -->
+        <div class="page-content" id="history-page">
+            <h3>অর্ডার ইতিহাস</h3>
+            <div class="glass-card">মোট অর্ডার: ৪৮টি · সাফল্য ৮৫%</div>
+            <div class="glass-card">মোট স্পেন্ড: ৳১২,৫০০ · গড় ডেলিভারি ৩.২ দিন</div>
+            <div class="glass-card">টপ ওয়ার্কার: #234 (৯৮% success)</div>
+        </div>
+
+        <!-- DRAFT page -->
+        <div class="page-content" id="draft-page">
+            <h3>ড্রাফট অর্ডার</h3>
+            <div class="glass-card" style="margin-bottom:12px;" onclick="loadDraft(1)"><i class="fas fa-envelope"></i> Gmail 50 pcs · ৳১৩৭.৫০ · ১০মি আগে</div>
+            <div class="glass-card" onclick="loadDraft(2)"><i class="fab fa-linkedin"></i> LinkedIn 30 pcs · ৳১৫৭.৫০ · ২ঘ আগে</div>
+        </div>
+    </div>
+
+    <!-- bottom navigation 6 page -->
+    <div class="bottom-nav">
+        <button class="nav-item"><i class="fas fa-handshake"></i><span>P2P</span></button>
+        <button class="nav-item active"><i class="fas fa-shopping-cart"></i><span>অর্ডার</span></button>
+        <button class="nav-item"><i class="fas fa-bag-shopping"></i><span>বাই</span></button>
+        <button class="nav-item"><i class="fas fa-dollar-sign"></i><span>সেল</span></button>
+        <button class="nav-item"><i class="fas fa-cogs"></i><span>জেনারেট</span></button>
+        <button class="nav-item"><i class="fas fa-user-circle"></i><span>প্রোফাইল</span></button>
+    </div>
+
+    <!-- small tutorial popup (not fullscreen) -->
+    <div id="tutorialPopup" class="tutorial-popup">
+        <div style="text-align:center;"><i class="fas fa-graduation-cap" style="font-size:48px;color:#9bc5ff;"></i></div>
+        <h3 style="text-align:center;">অর্ডার তৈরি গাইড</h3>
+        <div class="tutorial-step-list">
+            <div>🔹 1. অর্ডার টাইপ ও লিমিট দিন</div>
+            <div>🔹 2. ডাটা অপশন: অটো/ফিক্সড ঠিক করুন</div>
+            <div>🔹 3. পেমেন্ট চেক করুন</div>
+            <div>🔹 4. কনফার্ম বা শিডিউল করুন</div>
+        </div>
+        <button class="btn" style="background:#225a9c; width:100%; border-radius:40px;" onclick="closeTutorial()">বুঝলাম</button>
+    </div>
+
+    <!-- payment modal (small) -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-content small">
+            <h3 style="color:#b3d9ff;">পেমেন্ট কনফার্মেশন</h3>
+            <div style="margin:15px 0;"><label>অর্ডার আইডি</label><input class="form-control" id="payment-order-id" readonly></div>
+            <div><label>মোট (ফি সহ)</label><input class="form-control" id="payment-with-fee" readonly></div>
+            <div style="display:flex; gap:10px; margin-top:25px;">
+                <button class="btn" style="background:#10496b; flex:1;" onclick="processPayment()">এখনই পেমেন্ট</button>
+                <button class="btn" style="background:#2e3d5c; flex:1;" onclick="scheduleOrder()">শিডিউল</button>
+            </div>
+            <button style="margin-top:12px; background:none; border:none; color:gray;" onclick="closePaymentModal()">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <!-- order preview / schedule chips -->
+    <div id="orderPreviewArea" style="margin:20px 0;"></div>
+
+    <script>
+        (function() {
+            // ---------- state ----------
+            let appState = {
+                orderDataOption:'auto',
+                orderFieldOptions:{name:'fixed',email:'auto',password:'auto',recovery:'auto'},
+                orderFixedData:{name:'',email:'',password:'',recovery:''},
+                userBalance:1500.00,
+                currentOrder:null
+            };
+            let dummyReceived = [
+                {worker:'#789', name:'john.doe1234', pass:'••••', time:'১০ মিনিট', type:'gmail', code:'GML001'},
+                {worker:'#234', name:'alice.wonder456', pass:'SecurePass123', time:'১ ঘন্টা', type:'gmail', code:'GML002'},
+                {worker:'#111', name:'rabbi.akand', pass:'pass123', time:'২ ঘন্টা', type:'gmail', code:'GML003'},
+                {worker:'#789', name:'testuser99', pass:'tEst@99', time:'৫ মিনিট', type:'gmail', code:'GML004'},
+                {worker:'#567', name:'john.doe567', pass:'pass', time:'২০ মিনিট', type:'gmail', code:'GML005'}
+            ];
+            let currentPage=1, rows=3;
+
+            // init
+            document.querySelectorAll('.sub-nav-item').forEach(btn=>{
+                btn.addEventListener('click',function(){
+                    document.querySelectorAll('.sub-nav-item').forEach(b=>b.classList.remove('active'));
+                    this.classList.add('active');
+                    let page = this.dataset.page;
+                    document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));
+                    document.getElementById(page+'-page').classList.add('active');
+                    if(page==='received') renderReceivedPage();
+                });
+            });
+
+            function renderReceivedPage(){
+                let listDiv = document.getElementById('receivedList');
+                let searchTerm = document.getElementById('receiveSearch')?.value?.toLowerCase() || '';
+                let filtered = dummyReceived.filter(r=> r.worker.includes(searchTerm) || r.name.includes(searchTerm) || r.code.includes(searchTerm));
+                let start = (currentPage-1)*rows;
+                let paginated = filtered.slice(start, start+rows);
+                listDiv.innerHTML = paginated.map(r=>`
+                    <div class="received-compact-card" onclick='showReceivedModal(${JSON.stringify(r)})'>
+                        <div><i class="fas fa-envelope"></i> ${r.name} <span style="color:#aaa;"> (${r.worker})</span></div>
+                        <div>⏱️ ${r.time}</div>
+                    </div>
+                `).join('');
+                let totalPages = Math.ceil(filtered.length/rows)||1;
+                document.getElementById('recPagination').innerHTML = Array(totalPages).fill(0).map((_,i)=>`<button class="pagination-btn" style="background:${currentPage===i+1?'#3e6bb0':'#203552'}; border:none; color:#fff; padding:6px 14px; border-radius:30px;" onclick="changePage(${i+1})">${i+1}</button>`).join('');
+            }
+
+            window.changePage = (pg)=>{ currentPage=pg; renderReceivedPage(); };
+            window.showReceivedModal = (r)=>{
+                alert(`বিস্তারিত\nওয়ার্কার: ${r.worker}\nইমেইল: ${r.name}@gmail.com\nপাস: ${r.pass}\nকোড: ${r.code}`);
+            };
+            document.getElementById('receiveSearch')?.addEventListener('input', ()=>{
+                currentPage=1; renderReceivedPage();
+            });
+
+            // order functions
+            window.selectOrderDataOption = (opt)=>{
+                appState.orderDataOption = opt;
+                document.getElementById('order-auto-btn').classList.toggle('active',opt==='auto');
+                document.getElementById('order-fixed-btn').classList.toggle('active',opt==='fixed');
+                document.getElementById('order-fixed-data-fields').style.display = opt==='fixed'?'block':'none';
+            };
+            window.selectOrderFieldOption = (field,opt)=>{
+                appState.orderFieldOptions[field]=opt;
+                let fixedBtn = document.getElementById(`order-${field}-fixed-btn`);
+                let autoBtn = document.getElementById(`order-${field}-auto-btn`);
+                if(fixedBtn && autoBtn){
+                    fixedBtn.classList.toggle('active',opt==='fixed');
+                    autoBtn.classList.toggle('active',opt==='auto');
+                }
+                let inp = document.getElementById(`order-fixed-${field}`);
+                if(inp) inp.disabled = (opt!=='fixed');
+            };
+            window.updateAllCalculations = ()=>{
+                let limit = +document.getElementById('order-limit').value || 50;
+                let price = 2.5;
+                let subtotal = limit*price;
+                let total = subtotal*1.12;
+                document.getElementById('required-fund-display').innerText = total.toFixed(2);
+                document.getElementById('yourPriceLabel').innerText = '৳'+price;
+                document.getElementById('your-price-bar').style.width = '45%';
+            };
+            setInterval(()=>{ document.getElementById('order-id-number').innerText = Math.floor(1000+Math.random()*9000); }, 2000);
+            window.confirmOrder = ()=>{
+                if(!validateOrder()) return;
+                let order = collectOrder();
+                appState.currentOrder = order;
+                document.getElementById('payment-order-id').value = order.id;
+                document.getElementById('payment-with-fee').value = order.total;
+                document.getElementById('payment-modal').classList.add('active');
+            };
+            function validateOrder(){
+                return true;
+            }
+            function collectOrder(){
+                return {
+                    id: 'ORD-'+document.getElementById('order-id-number').innerText,
+                    subtotal: 125, total: 140, date: '2025-04-10'
+                };
+            }
+            window.processPayment = ()=>{
+                appState.userBalance -= appState.currentOrder.total;
+                document.getElementById('wallet-balance-display').innerText = appState.userBalance.toFixed(2);
+                showNotif('পেমেন্ট সফল! অর্ডার কনফার্মড');
+                document.getElementById('payment-modal').classList.remove('active');
+                let preview = `<div class="glass-card" style="margin-top:16px;">✅ অর্ডার পেমেন্ট সম্পন্ন: ${appState.currentOrder.id}<br><div class="schedule-chip" onclick="rescheduleNow()"><i class="fas fa-clock"></i> এখনি দিন / শিডিউল</div></div>`;
+                document.getElementById('orderPreviewArea').innerHTML = preview;
+            };
+            window.scheduleOrder = ()=>{
+                showNotif('শিডিউল অপশন চালু (ডেমো)');
+                closePaymentModal();
+            };
+            window.rescheduleNow = ()=> alert('শিডিউল ট্যাব খুলবে');
+            window.closePaymentModal = ()=> document.getElementById('payment-modal').classList.remove('active');
+            window.showNotif = (msg)=> alert(msg);
+
+            window.applyTemplate = (t)=>{
+                if(t==='gmail50'){
+                    document.querySelector('[data-page="order"]').click();
+                    document.getElementById('order-limit').value=50;
+                    selectOrderDataOption('auto');
+                    updateAllCalculations();
+                    showNotif('Gmail 50 টেমপ্লেট লোড');
+                } else showNotif('টেমপ্লেট সিলেক্ট');
+            };
+            window.createCustomTemplate = ()=> showNotif('কাস্টম টেমপ্লেট তৈরি (শীঘ্রই)');
+            window.loadDraft = (id)=> {
+                document.querySelector('[data-page="order"]').click();
+                document.getElementById('order-limit').value = id*30;
+                showNotif(`ড্রাফট ${id} লোড`);
+            };
+            // tutorial
+            window.showTutorial = ()=> document.getElementById('tutorialPopup').classList.add('show');
+            window.closeTutorial = ()=> document.getElementById('tutorialPopup').classList.remove('show');
+            setTimeout(()=>{ document.getElementById('tutorialPopup').classList.add('show'); }, 800);
+            // top icons notification
+            document.querySelectorAll('.top-icon')[0].addEventListener('click',()=> showNotif('ওয়ালেট ব্যালেন্স ৳১৫০০'));
+            document.querySelectorAll('.top-icon')[1].addEventListener('click',()=> showNotif('কোন নতুন নোটিফিকেশন নেই'));
+            // price updates
+            document.getElementById('order-type')?.addEventListener('change', updateAllCalculations);
+            updateAllCalculations();
+
+            // simple page switching via bottom nav (extra)
+            document.querySelectorAll('.nav-item').forEach((item,idx)=>{
+                item.addEventListener('click',function(){
+                    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+                    this.classList.add('active');
+                    if(idx===1) document.querySelector('[data-page="order"]').click();  // order
+                    else showNotif('পৃষ্ঠা: '+this.innerText);
+                });
+            });
+        })();
+    </script>
+    <style>
+        .price-bar{display:flex;align-items:center;gap:5px;margin:10px 0;}
+        .price-bar span{min-width:60px; font-size:14px;}
+        .price-bar-container{flex:1; background:#2a3e60; height:10px; border-radius:20px;}
+        .form-control{background:#1a304b; border:1px solid #3f6090; color:#fff; border-radius:30px; padding:10px 15px; width:100%;}
+        .btn{border:none; background:#2565ae; color:#fff; font-weight:bold; border-radius:40px; padding:12px; cursor:pointer;}
+        .btn:active{transform:scale(0.98);}
+        .pagination-btn{margin:0 4px; border:none; background:#1e385a; color:#fff; padding:8px 15px; border-radius:30px;}
+    </style>
+</body>
+</html>
